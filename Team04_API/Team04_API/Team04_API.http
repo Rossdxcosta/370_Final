@@ -1,0 +1,6 @@
+@Team04_API_HostAddress = http://localhost:5120
+
+GET {{Team04_API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

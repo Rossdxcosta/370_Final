@@ -1,0 +1,135 @@
+<div class="flex flex-row w-full m-0 p-0 bg-gray-50 dark:bg-gray-800 justify-center" style="height: 100%">
+  <h3 class="btn btn-outline-light content-center bg-blue-500 text-white cursor-pointer fixed z-50 top-5 shadow-md hover:bg-blue-600 text-center p-3 m-3 rounded-full" routerLink="/client-dashboard">
+    Back to dashboard</h3>
+
+  <!-- ChatNav Start -->
+  <!-- <div class="w-2/12 m-0 p-0" style="width: 20vw !important;" (click)="closeMenuModal()">
+    <div class="h-full absolute bg-gray-700 dark:bg-gray-900 float-start" style="width: 20vw !important;">
+      <h2 class="text-center p-8 text-white">Chats</h2>
+
+
+      <div class="justify-center items-center text-white content-center align-middle p-10 pl-4 flex m-3 highlighted rounded-lg">
+        @if (list.length > 1) {
+          <p class="w-3/4">{{list[1].messageText}}</p>
+        }
+        @else {
+          <p class="w-3/4">New Chat (Current)</p>
+        }
+        <button type="button"
+          class="absolute right-5 text-white hover:text-white border flex justify-center items-center border-white hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 text-center content-center float-end"
+          style="aspect-ratio: 1/1; width: 45px; border-radius: 50px;">x</button>
+      </div>
+      @for (chat of chatlog; track $index) {
+        <div class="justify-center content-center align-middle text-white p-10 pl-4 flex m-3 rounded-lg cursor-pointer">
+          <p class="text-white w-3/4">{{chat.conversation_Title}}</p>
+          <button type="button"
+            class="absolute right-5 text-white hover:text-white border flex justify-center items-center border-white hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 text-center content-center float-end"
+            style="aspect-ratio: 1/1; width: 45px; border-radius: 50px;" (click)="dismissChat(chat.chatUUID)">x</button>
+        </div>
+      }
+
+
+      <div class="w-full flex text-center justify-center">
+        <button type="button"
+          class="text-gray-300 hover:text-gray-800 border flex justify-center items-center border-gray-300 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-800 font-medium rounded-full text-sm px-5 py-2.5 my-5 text-center content-center float-end"
+          style="aspect-ratio: 1/1; width: 45px; border-radius: 50px;">+</button>
+      </div>
+    </div>
+  </div> -->
+  <!-- ChatNav End -->
+
+
+  <div class="w-full m-0 p-0 fixed overflow-scroll h-full" style="right: 0px !important; overflow-x: hidden !important;-ms-overflow-style: none; scrollbar-width: none;">
+    <div class="bg-body flex flex-col">
+      <nav class="fixed z-50 h-24 bg-gray-200 border-gray-200 dark:bg-gray-500 w-full">
+        <div class="max-w-screen flex flex-wrap items-center justify-between px-4 py-2">
+          <h1 class="text-black dark:text-white" style="margin: 0px !important;">{{username}}</h1>
+          <div class="flex items-end rtl:space-x-reverse">
+            <!-- Dropdown menu -->
+            <app-profile-icon class="relative float-end m-2" (click)="showMenuModal()"
+              style="z-index: 999;"></app-profile-icon>
+            <div *ngIf="showMenu" class="rounded-xl focus relative inline-block text-left bg-grey-100 dark:bg-grey-700">
+              <div
+                class="origin-top-right absolute right-0 w-56 rounded-xl shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                <div class="rounded-xl">
+                  <button (click)="setDarkMode()"
+                    class="rounded-t-xl w-full py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                    <span *ngIf="!darkMode()" class="material-icons">dark_mode</span>
+                    <span *ngIf="darkMode()" class="material-icons">light_mode</span>
+                  </button>
+                  <button
+                    class="w-full py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                    (click)="updateUser()">Profile</button>
+                  <button
+                    class="w-full py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Settings</button>
+                  <button
+                    class="w-full py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                    (click)="openDialog(userDRequest)">Deactivate</button>
+                  <button
+                    class="w-full py-2.5 px-5 text-sm font-medium text-white focus:outline-none bg-red-700 border border-gray-200 hover:bg-red-800 dark:bg-red-700 dark:hover:bg-red-800 dark:focus:ring-red-900"
+                    (click)="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      
+      <!------------------------------------- NAVBAR END -------------------------------------------->
+      
+
+      <!-- Conversation Start -->
+      <div class="pt-28 mt-5 flex relative flex-col h-100 z-1" style="margin-bottom: 7rem;" (click)="closeMenuModal()">
+        <!-- Conversation bubbles go here -->
+
+        <!-- BOT MESSAGE -->
+        <ng-container  class="flex w-full flex-col gap-4">
+
+          <div class="flex w-full flex-col gap-4">
+            @for (item of list; track $index) {
+              @if (item.role == 2) {
+              <div
+                class="ml-auto flex max-w-[80%] flex-col gap-2 mr-4 rounded-l-xl rounded-tr-xl bg-very-dark-grey p-4 text-sm text-white md:max-w-[60%] dark:bg-blue-600 dark:text-slate-100">
+                {{item.messageText}}
+                <span class="ml-auto text-xs">{{item.time | date: "h:mm a"}}</span>
+              </div>
+              }
+              @else if (item.role == 0) {
+              <div
+                class="mr-auto flex max-w-[80%] flex-wrap flex-col gap-2 ml-4 rounded-r-xl rounded-tl-xl bg-blue-200 text-black bg-slate-400 p-4 md:max-w-[60%] dark:bg-slate-800">
+                <span class="font-semibold text-black dark:text-black">Beemie(ChatBot)</span>
+                <pre class="text-sm w-[80%] text-slate-700 dark:text-slate-300 pb-0 mb-0" style="white-space: pre-wrap;">
+                  <p class="pb-0 mb-0">{{item.messageText}}</p>
+                </pre>
+                <span class="ml-auto text-xs">{{item.time | date: "h:mm a"}}</span>
+              </div>
+              }
+              @else {
+              <div
+                class="mr-auto flex max-w-[80%] flex-col gap-2 ml-4 rounded-r-xl rounded-tl-xl bg-green-400 p-4 md:max-w-[60%]">
+                <span class="font-semibold text-black dark:text-black">{{item.name}}</span>
+                <div class="text-sm text-slate-700 dark:text-slate-300">
+                  {{item.messageText}}
+                </div>
+                <span class="ml-auto text-xs">{{item.time | date: "h:mm a"}}</span>
+              </div>
+              }
+            }
+          </div>
+        </ng-container>
+      </div>
+      <!-- Conversation End -->
+
+      <!-- ChatInput Start -->
+      <div class="w-full self-end fixed bottom-0 d-flex z-5" (click)="closeMenuModal()"
+        style="right: 0px !important; height: 4rem;">
+        <input type="text" (change)="userMessage = text.value" #text
+          placeholder="E.g. Hey Beemie, can you help me with my VDI connectivity problems?" id="text"
+          class="mb-0 h-full w-10/12 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <button type="submit" class="h-full bg-blue-600 text-white text-lg w-2/12 form-control"
+          (click)="sendMessage(); text.value = '';">SEND</button>
+      </div>
+      <!-- ChatInput End -->
+    </div>
+  </div>
+</div>

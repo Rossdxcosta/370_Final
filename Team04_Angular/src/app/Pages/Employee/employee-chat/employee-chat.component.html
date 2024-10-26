@@ -1,0 +1,110 @@
+<div class="flex flex-row w-full m-0 p-0 bg-gray-50 dark:bg-gray-800 justify-center" style="height: 100%">
+  <a class="btn btn-outline-light content-center bg-blue-500 text-white cursor-pointer fixed z-50 top-5 shadow-md hover:bg-blue-600 text-center p-5 mt-0 m-2 rounded-full" href="/employee-dashboard">
+    Back to dashboard</a>
+
+  <!-- ChatNav Start -->
+  <!-- <div class="w-2/12 m-0 p-0" style="width: 20vw !important;" (click)="closeMenuModal()">
+    <div class="h-full absolute bg-gray-700 dark:bg-gray-900 float-start" style="width: 20vw !important;">
+      <h2 class="text-center p-8 text-white">Chats</h2>
+
+
+      <div class="justify-center items-center text-white content-center align-middle p-10 pl-4 flex m-3 highlighted rounded-lg">
+        @if (list.length > 1) {
+          <p class="w-3/4">{{list[1].messageText}}</p>
+        }
+        @else {
+          <p class="w-3/4">New Chat (Current)</p>
+        }
+        <button type="button"
+          class="absolute right-5 text-white hover:text-white border flex justify-center items-center border-white hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 text-center content-center float-end"
+          style="aspect-ratio: 1/1; width: 45px; border-radius: 50px;">x</button>
+      </div>
+      @for (chat of chatlog; track $index) {
+        <div class="justify-center content-center align-middle text-white p-10 pl-4 flex m-3 rounded-lg cursor-pointer">
+          <p class="text-white w-3/4">{{chat.conversation_Title}}</p>
+          <button type="button"
+            class="absolute right-5 text-white hover:text-white border flex justify-center items-center border-white hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 text-center content-center float-end"
+            style="aspect-ratio: 1/1; width: 45px; border-radius: 50px;" (click)="dismissChat(chat.chatUUID)">x</button>
+        </div>
+      }
+
+
+      <div class="w-full flex text-center justify-center">
+        <button type="button"
+          class="text-gray-300 hover:text-gray-800 border flex justify-center items-center border-gray-300 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-800 font-medium rounded-full text-sm px-5 py-2.5 my-5 text-center content-center float-end"
+          style="aspect-ratio: 1/1; width: 45px; border-radius: 50px;">+</button>
+      </div>
+    </div>
+  </div> -->
+  <!-- ChatNav End -->
+
+
+  <div class="w-full m-0 p-0 fixed overflow-scroll h-full" style="right: 0px !important; overflow-x: hidden !important;-ms-overflow-style: none; scrollbar-width: none;">
+    <div class="bg-body flex flex-col">
+      <nav class="fixed z-50 h-24 bg-gray-200 border-gray-200 dark:bg-gray-500 w-full">
+        <div class="max-w-screen flex flex-wrap items-center text-center justify-between px-4 py-2">
+          <h1 class="text-black dark:text-white" style="margin: 0px !important;">{{username}}</h1>
+          <div class="flex items-end rtl:space-x-reverse">
+            <!-- Dropdown menu -->
+          </div>
+        </div>
+      </nav>
+      
+      <!------------------------------------- NAVBAR END -------------------------------------------->
+      
+
+      <!-- Conversation Start -->
+      <div class="pt-28 mt-5 flex relative flex-col h-100 z-1" style="margin-bottom: 7rem;">
+        <!-- Conversation bubbles go here -->
+
+        <!-- BOT MESSAGE -->
+        <ng-container  class="flex w-full flex-col gap-4">
+
+    <div class="flex w-full flex-col gap-4">
+      @for (item of list; track $index) {
+        @if (item.role == 3) {
+        <div
+          class="ml-auto flex max-w-[80%] flex-col gap-2 rounded-l-xl rounded-tr-xl bg-very-dark-grey p-4 text-sm text-white md:max-w-[60%] dark:bg-blue-600 dark:text-slate-100">
+          {{item.messageText}}
+          <span class="ml-auto text-xs">{{item.time | date: "h:mm a"}}</span>
+        </div>
+        }
+        @else if (item.role == 0) {
+        <div
+          class="mr-auto flex max-w-[80%] flex-col gap-2 rounded-r-xl rounded-tl-xl bg-blue-200 text-black bg-slate-400 p-4 md:max-w-[60%] dark:bg-slate-800">
+          <span class="font-semibold text-black dark:text-white">Beemie(ChatBot)</span>
+          <div class="text-sm text-slate-700 dark:text-slate-300">
+            {{item.messageText}}
+          </div>
+          <span class="ml-auto text-xs">{{item.time | date: "h:mm a"}}</span>
+        </div>
+        }
+        @else {
+        <div
+          class="mr-auto flex max-w-[80%] flex-col gap-2 rounded-r-xl rounded-tl-xl bg-dark-grey p-4 md:max-w-[60%] dark:bg-slate-800">
+          <span class="font-semibold text-black dark:text-white">{{item.name}}</span>
+          <div class="text-sm text-slate-700 dark:text-slate-300">
+            {{item.messageText}}
+          </div>
+          <span class="ml-auto text-xs">{{item.time | date: "h:mm a"}}</span>
+        </div>
+        }
+      }
+    </div>
+
+    @for (item of messages; track $index) {
+      {{item.messageText}}
+    }
+    
+
+  </ng-container>
+</div>
+<div>
+  <div class="fixed w-full bottom-0">
+    <input type="search" id="search"
+      class="block w-full p-7 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      placeholder="Type your message" [(ngModel)]="newMessage" required />
+    <button (click)="sendMessage()"
+      class="text-white absolute bottom-0 right-0 m-0 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm h-full w-1/4 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Send</button>
+  </div>
+</div>

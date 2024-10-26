@@ -1,0 +1,179 @@
+<div class="flex justify-center items-center h-screen p-10 m-0 bg-black">
+    <img src="../../../../assets/Images/BMW_Sport_Background.jpg"
+        class="fixed z-0 opacity-60 object-cover h-screen min-w-full" alt="">
+    <div
+        class="relative w-1/2 z-50 bg-white border info-card border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 bg-opacity-60 dark:bg-opacity-95">
+        <div class="backdrop-blur-sm p-10">
+            <form #profileForm="ngForm" (ngSubmit)="updateUser()">
+                <div class="flex justify-between pb-5">
+                    <h1 class="text-xl text-black dark:text-white" style="margin-bottom: 0px;">Profile Update</h1>
+                    <a class="focus:outline-none text-white bg-blue-700 flex justify-center items-center cursor-pointer hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        style="margin-bottom: 0px; display: flex; align-items: center; justify-content: center;"
+                        href="/ChangePassword">
+                        <i class="fa-solid fa-pen text-gray-50 mr-2"></i> Change Password
+                    </a>
+                </div>
+                <hr class="mb-10">
+
+                <!-- Name -->
+                <div class="mb-5">
+                    <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                    <input type="text" id="name" name="name" ngModel [(ngModel)]="updatedUser.name" required
+                        #name="ngModel"
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light">
+                    <p class="text-red-600 text-xs mt-2" style="margin-top: 0.5rem;"
+                        *ngIf="name.invalid && name.touched">Please enter your name.</p>
+                </div>
+
+                <!-- Surname -->
+                <div class="mb-5">
+                    <label for="surname"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Surname</label>
+                    <input type="text" id="surname" name="surname" ngModel [(ngModel)]="updatedUser.surname" required
+                        #surname="ngModel"
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light">
+                    <p class="text-red-600 text-xs mt-2" style="margin-top: 0.5rem;"
+                        *ngIf="surname.invalid && surname.touched">Please enter your surname.</p>
+                </div>
+
+                <!-- Phone -->
+                <div class="mb-5">
+                    <label for="phone"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone-number</label>
+                    <input type="number" id="phone" name="phone" ngModel [(ngModel)]="updatedUser.phone" required
+                        #phone="ngModel"
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                        (ngModelChange)="onPhoneChange($event)">
+                    <p class="text-red-600 text-xs mt-2" style="margin-top: 0.5rem;"
+                        *ngIf="phone.invalid && phone.touched">Please enter your phone number.</p>
+                </div>
+
+
+                <!-- Title -->
+                <div class="mb-5">
+                    <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select your
+                        title</label>
+                    <select id="title" name="title" ngModel [(ngModel)]="updatedUser.title_ID" required #title="ngModel"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option *ngFor="let atitle of titles" [value]="atitle.title_ID">{{ atitle.title_Description }}
+                        </option>
+                    </select>
+                    <p class="text-red-600 text-xs mt-2" style="margin-top: 0.5rem;"
+                        *ngIf="title.invalid && title.touched">Please select your title.</p>
+                </div>
+
+                <!-- Language -->
+                <div class="mb-5">
+                    <label for="language" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select
+                        your language</label>
+                    <select id="language" name="language" ngModel [(ngModel)]="updatedUser.language_ID" required
+                        #language="ngModel"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option *ngFor="let lang of languages" [value]="lang.language_ID">{{ lang.description }}
+                        </option>
+                    </select>
+                    <p class="text-red-600 text-xs mt-2" style="margin-top: 0.5rem;"
+                        *ngIf="language.invalid && language.touched">Please select your language.</p>
+                </div>
+
+                <!-- File Upload -->
+                <div class="w-full flex justify-center content-center align-middle pt-10">
+                    <div class="w-3/4 align-middle self-center">
+                        <label for="doc" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-50">Profile
+                            Image:</label>
+                        <input name="doc" id="doc" type="file" accept="image/*" (change)="selectFile($event)"
+                            class="mb-5 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                    </div>
+                    <div class="w-1/4 flex justify-center content-center align-middle self-center" *ngIf="preview">
+                        <img [src]="preview"
+                            class="object-fill w-32 h-32 aspect-square border-2 p-1 rounded-full border-gray-500" />
+                    </div>
+                </div>
+
+                <hr class="my-10">
+                <!-- Submit Button -->
+                <button data-tooltip-target="tooltip-default" type="submit"
+                    class="cursor-pointer disabled:opacity-50 disabled:hover:bg-green-700 w-full focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                    [disabled]="profileForm.invalid">
+                    <i class="fa-solid fa-floppy-disk text-white mr-2"></i>
+                    Save Changes
+                </button>
+                <span class="group-hover:opacity-100 p-4 transition-opacity bg-gray-800 px-1 text-sm text-gray-100 rounded-md absolute left-1/2 
+                -translate-x-1/2 translate-y-[-125px] opacity-0 m-4 mx-auto">Saves your profile changes</span>
+            </form>
+        </div>
+    </div>
+
+    <a (click)="back()"
+        class="fixed left-5 top-5 py-2.5 px-5 text-sm font-medium flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200 hover:cursor-pointer">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
+            </path>
+        </svg>
+        Back to Dashboard
+    </a>
+
+    <!-- Success Modal -->
+    <div *ngIf="showSuccessModal"
+        class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center">
+        <div class="relative p-4 w-full max-w-md max-h-full">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">
+                <div class="p-4 md:p-5 text-center">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Success</h3>
+                    <div class="mt-2">
+                        <p class="text-sm text-gray-500 dark:text-gray-300">{{ successMessage }}</p>
+                    </div>
+                    <div class="mt-4">
+                        <button (click)="closeSuccessModal()"
+                            class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div *ngIf="showErrorModal"
+        class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center">
+        <div class="relative p-4 w-full max-w-md max-h-full">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">
+                <div class="p-4 md:p-5 text-center">
+                    <h3 class="text-lg leading-6 font-medium text-red-600 dark:text-red-400">Error</h3>
+                    <div class="mt-2">
+                        <p class="text-sm text-gray-500 dark:text-gray-300">{{ errorMessage }}</p>
+                    </div>
+                    <div class="mt-4">
+                        <button (click)="closeErrorModal()"
+                            class="px-4 py-2 bg-red-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Information Modal -->
+    <div *ngIf="showInfoModal"
+        class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center">
+        <div class="relative p-4 w-full max-w-md max-h-full">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">
+                <div class="p-4 md:p-5 text-center">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Information</h3>
+                    <div class="mt-2">
+                        <p class="text-sm text-gray-500 dark:text-gray-300">{{ infoMessage }}</p>
+                    </div>
+                    <div class="mt-4">
+                        <button (click)="closeInfoModal()"
+                            class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

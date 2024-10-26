@@ -1,0 +1,180 @@
+.reporting-page {
+  .section-card {
+    margin-bottom: 20px;
+    padding: 20px;
+  }
+
+  .statistics-container {
+    margin-bottom: 20px;
+    background-color: #1e1e2d; // Adjust this color to match your select statistics container
+  }
+
+  .stat-card {
+    aspect-ratio: 1 / 1; // This makes the container square
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      line-height: 2rem;
+      font-weight: bold;
+
+      @media (min-width: 640px) {
+        font-size: 1.75rem;
+      }
+
+      @media (min-width: 1024px) {
+        font-size: 2rem;
+      }
+    }
+  }
+
+  .mini-navbar {
+    button {
+      transition: background-color 0.3s ease;
+    }
+  }
+
+  .dynamic-form {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+
+    label {
+      margin-top: 10px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 8px;
+      border: 1px solid #dee2e6;
+      border-radius: 0.25rem;
+    }
+  }
+
+  .visual-statistics {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+
+    .chart-container {
+      flex: 1 1 45%;
+      margin: 25px;
+      padding: 20px;
+      border-radius: 0.25rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .chart {
+      width: 100%;
+      height: 300px; 
+    }
+  }
+
+  .flex-item {
+    flex: 1 1 48%;
+  }
+
+  .d-flex {
+    display: flex;
+  }
+
+  .justify-content-between {
+    justify-content: space-between;
+  }
+
+  .align-items-center {
+    align-items: center;
+  }
+
+  .chart-selection {
+    display: flex;
+    align-items: center;
+
+    .chart-selection-field {
+      width: 200px;
+    }
+  }
+
+  .pdf-preview-container {
+    display: flex;
+    justify-content: center;
+  }
+  
+  app-pdf-viewer {
+    max-width: 800px;
+    width: 100%;
+  }
+
+  .pdf-scroll-container {
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+
+  .chart-container {
+    width: 100%;
+    height: 350px;
+    margin-bottom: 20px;
+  }
+
+  .chart-wrapper {
+    flex-grow: 1;
+    position: relative;
+  }
+
+  ag-charts {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .reporting-page {
+    .statistics-cards {
+      .stat-value {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1023px) {
+  .reporting-page {
+    .statistics-cards {
+      .stat-value {
+        font-size: 1.75rem;
+      }
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .reporting-page {
+    .statistics-cards {
+      .stat-value {
+        font-size: 2rem;
+      }
+    }
+  }
+}

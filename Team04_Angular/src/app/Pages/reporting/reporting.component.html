@@ -1,0 +1,180 @@
+<div class="reporting-page"></div>
+<!-- Mini-Navbar for Section Navigation -->
+<div class="mini-navbar bg-gray-200 dark:bg-gray-900 p-5 flex justify-center mb-10 border border-gray-50 dark:border-gray-700">
+  <button class="mx-2 px-4 py-2 rounded dark:text-gray-50 hover:bg-gray-300 dark:hover:bg-gray-600"
+    [ngClass]="{'bg-gray-300 dark:bg-gray-600': currentSection === 'generateReport', 'bg-white dark:bg-gray-700': currentSection !== 'generateReport'}"
+    (click)="selectSection('generateReport')">
+    Generate Report
+  </button>
+  <button class="mx-2 px-4 py-2 rounded dark:text-gray-50 hover:bg-gray-300 dark:hover:bg-gray-600"
+    [ngClass]="{'bg-gray-300 dark:bg-gray-600': currentSection === 'selectStatistics', 'bg-white dark:bg-gray-700': currentSection !== 'selectStatistics'}"
+    (click)="selectSection('selectStatistics')">
+    Select Statistics
+  </button>
+  <button class="mx-2 px-4 py-2 rounded dark:text-gray-50 hover:bg-gray-300 dark:hover:bg-gray-600"
+    [ngClass]="{'bg-gray-300 dark:bg-gray-600': currentSection === 'selectGraphs', 'bg-white dark:bg-gray-700': currentSection !== 'selectGraphs'}"
+    (click)="selectSection('selectGraphs')">
+    Select Graphs
+  </button>
+</div>
+
+<div [@slideAnimation]="animationDirection" *ngIf="currentSection === 'generateReport'">
+  <!-- Generate Report content -->
+  <div #chartContainer style="display: none; width: 1200px; height: 600px;"></div>
+  <div *ngIf="currentSection === 'generateReport'" [@slideAnimation]="animationDirection"
+    (@slideAnimation.done)="onAnimationDone($event)">
+    <div class="m-10 mb-0 rounded-lg p-10 bg-gray-100 dark:bg-gray-900">
+      <h1 class="text-center text-xl text-black dark:text-white">Generate Report:</h1>
+      <hr>
+      <div class="p-10">
+        <label for="report-type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choose report to
+          create</label>
+        <select id="report-type"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          [(ngModel)]="selectedReportType">
+          <option *ngFor="let report of reportTypes" [value]="report"> {{ report }} </option>
+        </select>
+
+        <div *ngIf="selectedReportType" class="w-full pt-5">
+          <div class="flex w-full">
+            <div class="flex flex-col w-1/2 pr-5">
+              <label for="start-date" class="text-gray-800 dark:text-gray-200">Start Date:</label>
+              <input class="dark:bg-gray-800 dark:text-white" name="start-date"
+                *ngIf="selectedReportType === 'Tickets by Date Range Report'" type="datetime-local" id="start-date"
+                [(ngModel)]="startDate" [max]="maxDate">
+            </div>
+            <div class="flex flex-col w-1/2 pl-5">
+              <label for="end-date" class="text-gray-800 dark:text-gray-200">End Date:</label>
+              <input class="dark:bg-gray-800 dark:text-white" name="end-date"
+                *ngIf="selectedReportType === 'Tickets by Date Range Report'" type="datetime-local" id="end-date"
+                [(ngModel)]="endDate" [max]="maxDate">
+            </div>
+          </div>
+          <!-- Preview Report Button -->
+          <button type="button"
+            class="w-full mt-10 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800"
+            (click)="previewPDFReport()">
+            Preview Report
+          </button>
+          <!-- Download Report Button -->
+          <button type="button"
+            class="w-full mt-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            (click)="generatePDFReport()">
+            Download Report PDF
+          </button>
+          <!-- PDF Previewer -->
+          <div *ngIf="isLoading">Loading...</div>
+          <div *ngIf="!isLoading && pdfSrc" class="pdf-preview mt-10">
+            <h2 class="text-center text-xl text-gray-800 dark:text-gray-200">PDF Preview</h2>
+            <div class="pdf-preview-container">
+              <div class="pdf-scroll-container">
+                <app-pdf-viewer [pdfSrc]="pdfSrc"></app-pdf-viewer>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="m-10 mb-0 rounded-lg p-10 bg-gray-100 dark:bg-gray-900">
+      <app-report-opt-in></app-report-opt-in>
+    </div>
+  </div>
+</div>
+
+
+<div [@slideAnimation]="animationDirection" *ngIf="currentSection === 'selectStatistics'">
+  <div class="p-10">
+    <div
+      class="w-full flex flex-col items-left p-6 mb-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700 mx-auto">
+      <h2 class="w-full pt-7 text-center text-2xl text-gray-800 dark:text-gray-200">Choose statistics to display in your
+        dashboard:</h2>
+      <div class="p-10 grid grid-cols-4 w-full justify-center content-center">
+        <div *ngFor="let stat of availableStatistics; let i = index" class="mb-2">
+          <label class="inline-flex items-center cursor-pointer float-start">
+            <input type="checkbox" [id]="stat.value" [(ngModel)]="stat.selected"
+              (ngModelChange)="onToggleChange(stat, $event)" name="ticketSubscription" class="sr-only peer">
+            <div
+              class="relative mx-3 w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600">
+            </div>
+            <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">{{ stat.label }}</span>
+          </label>
+        </div>
+      </div>
+      <div class="px-10">
+        <button (click)="applyStatisticsSelection()"
+          class="w-full focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+          Apply
+        </button>
+      </div>
+    </div>
+
+    <!-- Statistics Preview -->
+    <div class="statistics-container w-full flex flex-col items-left p-6 mb-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700 mx-auto">
+      <h2 class="text-xl text-black dark:text-white">Statistics Preview</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div *ngFor="let stat of displayedStatistics"
+          class="p-5 m-5 bg-gray-200 dark:bg-gray-700 rounded-xl w-full text-center">
+          <h3 class="text-gray-800 dark:text-gray-200">{{ stat.title }}</h3>
+          <p class="stat-value text-2xl font-bold mt-2" [ngClass]="{
+            'text-purple-600 dark:text-purple-300': stat.title.toLowerCase().includes('open tickets'),
+            'text-green-600 dark:text-green-300': stat.title.toLowerCase().includes('closed'),
+            'text-red-600 dark:text-red-300': stat.title.toLowerCase().includes('breached'),
+            'text-yellow-500 dark:text-yellow-300': stat.title.toLowerCase().includes('reopened'),
+            'text-blue-300': stat.title.toLowerCase().includes('total') || stat.title.toLowerCase().includes('average'),
+            'text-orange-600 dark:text-orange-300': stat.title.toLowerCase().includes('low priority'),
+            'text-pink-600 dark:text-pink-600': stat.title.toLowerCase().includes('escalated')
+          }">{{ stat.value }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div [@slideAnimation]="animationDirection" *ngIf="currentSection === 'selectGraphs'">
+  <!-- Select Graphs content -->
+  <div *ngIf="currentSection === 'selectGraphs'" [@slideAnimation]="animationDirection"
+    (@slideAnimation.done)="onAnimationDone($event)">
+    <div class="section-card w-full p-10">
+      <div
+        class="w-full flex flex-col items-left p-6 mb-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700 mx-auto">
+        <h2 class="w-full pt-7 text-center text-2xl text-gray-800 dark:text-gray-200">Choose charts to display in your
+          dashboard:</h2>
+        <div class="p-10 grid grid-cols-3 w-full justify-center content-center">
+          <div *ngFor="let chart of availableCharts; let i = index" class="mb-2">
+            <label class="inline-flex items-center cursor-pointer float-start">
+              <input type="checkbox" [id]="chart.value" [(ngModel)]="chart.selected"
+                (ngModelChange)="onToggleChangeChart(chart, $event)" name="ticketSubscription" class="sr-only peer">
+              <div
+                class="relative mx-3 w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600">
+              </div>
+              <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">{{ chart.label }}</span>
+            </label>
+          </div>
+        </div>
+        <div class="px-10">
+          <button (click)="applyChartSelection()"
+            class="w-full focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+            Apply
+          </button>
+        </div>
+      </div>
+
+      <div class="p-4">
+        <div class="w-full flex flex-col items-left p-6 mb-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700 mx-auto">
+          <h2 class="text-xl text-black dark:text-white">Charts Preview</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <ng-container *ngIf="displayedCharts.length < 1">
+              <h2 class="col-span-full text-center text-lg text-blue-300">Select charts in the Reporting panel</h2>
+            </ng-container>
+            <div *ngFor="let chart of displayedCharts; let i = index"
+              class="chart-container m-2 p-3">
+              <h4 class="text-gray-800 dark:text-gray-200">{{ chart.label }}</h4>
+              <div [id]="'chart-container-' + i" class="chart-wrapper"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

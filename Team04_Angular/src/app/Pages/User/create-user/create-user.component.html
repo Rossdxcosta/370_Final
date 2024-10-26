@@ -1,0 +1,381 @@
+<!-- Main container -->
+<div class="flex justify-center items-center h-screen m-0 bg-black">
+  <!-- Background image -->
+  <video autoplay loop class="blur-sm">
+    <source src="../../../assets/Background/Background vid.mp4" type="video/mp4">
+  </video>
+
+  <!-- Form container -->
+  <div class="fixed top-0 left-0 flex justify-center items-center w-full h-full">
+    <a href="/login"
+      class="fixed left-5 top-5 py-2.5 px-5 text-sm font-medium flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200 hover:cursor-pointer">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
+        </path>
+      </svg>
+      Back to Login
+    </a>
+    <div
+      class="p-10 info-card relative w-auto z-50 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 bg-opacity-60 dark:bg-opacity-95">
+      <!-- Header -->
+      <div class="flex justify-between pb-5">
+        <h1 class="text-xl text-black dark:text-white" style="margin-bottom: 0px;">Registration</h1>
+      </div>
+      <hr class="mb-10">
+
+      <!-- Mat Stepper -->
+      <mat-stepper [linear]="true" #stepper class="bg-transparent stepper">
+        <!-- Step 1: Fill out your name -->
+        <mat-step [completed]="Step1Completed">
+          <div class="max-w-md mx-auto p-4">
+            <ng-template matStepLabel>
+              <h5 class="text-gray-800 dark:text-gray-50 mb-4" style="margin-bottom: 0px;">Fill out your name</h5>
+            </ng-template>
+
+            <!-- Name Field -->
+            <div class="mb-4">
+              <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Enter your
+                name</label>
+              <input id="name" type="text" [formControl]="name" (blur)="updateErrorMessage()" required
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring focus:ring-blue-300 dark:focus:ring-blue-500">
+              <div *ngIf="name.invalid && name.touched" class="text-red-500 text-sm mt-1">{{ errorMessage }}</div>
+            </div>
+
+            <!-- Surname Field -->
+            <div class="mb-4">
+              <label for="surname" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Enter your
+                surname</label>
+              <input id="surname" type="text" [formControl]="surname" (blur)="updateErrorMessage()" required
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring focus:ring-blue-300 dark:focus:ring-blue-500">
+              <div *ngIf="surname.invalid && surname.touched" class="text-red-500 text-sm mt-1">{{ errorMessage }}</div>
+            </div>
+
+            <!-- Email Field -->
+            <div class="mb-4">
+              <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Enter your
+                email</label>
+              <input id="email" type="email" [formControl]="email" (blur)="updateErrorMessage()" required
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring focus:ring-blue-300 dark:focus:ring-blue-500">
+              <div *ngIf="email.invalid && email.touched" class="text-red-500 text-sm mt-1">{{ errorMessage }}</div>
+            </div>
+
+            <!-- Next Button -->
+            <div class="mt-6">
+              <button type="button" (click)="sendOTP(stepper)"
+                [disabled]="email.invalid || name.invalid || surname.invalid"
+                class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+                Next
+              </button>
+            </div>
+          </div>
+        </mat-step>
+
+        <!-- Step 2: Confirm Email -->
+        <mat-step [completed]="Step2Completed">
+          <div class="max-w-md mx-auto p-4">
+            <ng-template matStepLabel>
+              <h5 class="text-gray-800 dark:text-gray-50 mb-4" style="margin-bottom: 0px;">Confirm Email</h5>
+            </ng-template>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">A one-time PIN was sent to your email.</p>
+
+            <!-- OTP Field -->
+            <div class="mb-4">
+              <label for="otp" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Enter OTP</label>
+              <input id="otp" type="text" [formControl]="otp" required
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring focus:ring-blue-300 dark:focus:ring-blue-500">
+              <div *ngIf="otp.invalid && otp.touched" class="text-red-500 text-sm mt-1">OTP is required</div>
+            </div>
+
+            <!-- Verify Button -->
+            <div class="mt-6">
+              <button type="button" (click)="goConfirmOTP()" [disabled]="otp.invalid"
+                class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+                Verify
+              </button>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="mt-4 flex justify-between">
+              <button matStepperPrevious class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">
+                Back
+              </button>
+              <button matStepperNext [disabled]="isDisabled"
+                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+                Next
+              </button>
+            </div>
+          </div>
+        </mat-step>
+
+        <!-- Step 3: Fill out your Details -->
+        <mat-step>
+          <div class="max-w-md mx-auto p-4">
+            <ng-template matStepLabel>
+              <h5 class="text-gray-800 dark:text-gray-50 mb-4" style="margin-bottom: 0px;">Fill out your Details</h5>
+            </ng-template>
+
+            <!-- Date of Birth Field -->
+            <div class="mb-4">
+              <label for="dob" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Enter your Date of
+                Birth</label>
+              <input id="dob" type="date" [formControl]="dob" [max]="maxDate | date:'yyyy-MM-dd'" required
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring focus:ring-blue-300 dark:focus:ring-blue-500">
+              <div *ngIf="dob.invalid && dob.touched" class="text-red-500 text-sm mt-1">Date of Birth is required</div>
+            </div>
+
+
+            <!-- Title Field -->
+            <div class="mb-4">
+              <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Select your
+                title</label>
+              <select id="title" [formControl]="title" required
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                <option *ngFor="let atitle of titles; trackBy: trackByTitle" [value]="atitle.title_ID">
+                  {{ atitle.title_Description }}
+                </option>
+              </select>
+              <div *ngIf="title.invalid && title.touched" class="text-red-500 text-sm mt-1">Title is required</div>
+            </div>
+
+            <!-- Language Field -->
+            <div class="mb-4">
+              <label for="language" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Select your
+                language</label>
+              <select id="language" [formControl]="language" required
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                <option *ngFor="let lang of languages; trackBy: trackByLanguage" [value]="lang.language_ID">
+                  {{ lang.description }}
+                </option>
+              </select>
+              <div *ngIf="language.invalid && language.touched" class="text-red-500 text-sm mt-1">Language is required
+              </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="mt-6 flex justify-between">
+              <button matStepperPrevious class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">
+                Back
+              </button>
+              <button matStepperNext [disabled]="dob.invalid || title.invalid || language.invalid"
+                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+                Next
+              </button>
+            </div>
+          </div>
+        </mat-step>
+
+        <!-- Step 4: Set your location -->
+        <mat-step [completed]="citySelected">
+          <div class="max-w-md mx-auto p-4">
+            <ng-template matStepLabel>
+              <h5 class="text-gray-800 dark:text-gray-50 mb-4" style="margin-bottom: 0px;">Please set your location</h5>
+            </ng-template>
+
+            <!-- Country Field -->
+            <div class="mb-4">
+              <label for="country" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Select
+                Country</label>
+              <select id="country" [(ngModel)]="selectedCountry" (change)="onCountryChange()"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                <option [ngValue]="null">Select Country</option>
+                <option *ngFor="let country of countries" [ngValue]="country">
+                  {{ country.name }}
+                </option>
+              </select>
+            </div>
+
+            <!-- State Field -->
+            <div class="mb-4">
+              <label for="state" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Select State</label>
+              <select id="state" [(ngModel)]="selectedState" (change)="onStateChange()" [disabled]="!selectedCountry"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                <option [ngValue]="null">Select State</option>
+                <option *ngFor="let state of states" [ngValue]="state">
+                  {{ state.name }}
+                </option>
+              </select>
+            </div>
+
+            <!-- City Field -->
+            <div class="mb-4">
+              <label for="city" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Select City</label>
+              <select id="city" [(ngModel)]="selectedCity" (change)="onCityChange()" [disabled]="!selectedState"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                <option [ngValue]="null">Select City</option>
+                <option *ngFor="let city of cities" [ngValue]="city">
+                  {{ city.name }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="mt-6 flex justify-between">
+              <button matStepperPrevious class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">
+                Back
+              </button>
+              <button matStepperNext [disabled]="!citySelected"
+                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+                Next
+              </button>
+            </div>
+          </div>
+        </mat-step>
+
+        <!-- Step 5: Set your password -->
+        <mat-step>
+          <div class="max-w-md mx-auto p-4">
+            <ng-template matStepLabel>
+              <h5 class="text-gray-800 dark:text-gray-50 mb-4" style="margin-bottom: 0px;">Set your password</h5>
+            </ng-template>
+
+            <!-- Password Field -->
+            <div class="mb-4">
+              <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Enter your
+                password</label>
+              <div class="relative">
+                <input id="password" [type]="hide ? 'password' : 'text'" [formControl]="password" required
+                  class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring focus:ring-blue-300 dark:focus:ring-blue-500">
+                <button type="button" (click)="hide = !hide" [attr.aria-label]="'Toggle password visibility'"
+                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500">
+                  <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+              </div>
+              <div *ngIf="password.invalid && password.touched" class="text-red-500 text-sm mt-1">Password is required
+              </div>
+            </div>
+
+            <!-- Confirm Password Field -->
+            <div class="mb-4">
+              <label for="passwordConfirm" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Confirm
+                password</label>
+              <div class="relative">
+                <input id="passwordConfirm" [type]="hide ? 'password' : 'text'" [formControl]="passwordConfirm" required
+                  class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring focus:ring-blue-300 dark:focus:ring-blue-500">
+                <button type="button" (click)="hide = !hide" [attr.aria-label]="'Toggle password visibility'"
+                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500">
+                  <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+              </div>
+              <div *ngIf="passwordConfirm.invalid && passwordConfirm.touched" class="text-red-500 text-sm mt-1">
+                Confirmation is required</div>
+            </div>
+
+            <!-- Password Requirements -->
+            <div class="text-red-500 dark:text-red-400 text-sm mt-4">
+              <div *ngIf="!password.value?.match('^(?=.*[A-Z])')">At least one uppercase letter.</div>
+              <div *ngIf="!password.value?.match('(?=.*[a-z])')">At least one lowercase letter.</div>
+              <div *ngIf="!password.value?.match('(.*[0-9].*)')">At least one digit.</div>
+              <div *ngIf="!password.value?.match('(?=.*[!@#$%^&*])')">At least one special character.</div>
+              <div *ngIf="!password.value?.match('.{8,}')">At least 8 characters long.</div>
+              <div *ngIf="password.value !== passwordConfirm.value">Passwords don't match.</div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="mt-6 flex justify-between">
+              <button matStepperPrevious class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">
+                Back
+              </button>
+              <button matStepperNext [disabled]="passbutton"
+                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+                Next
+              </button>
+            </div>
+          </div>
+        </mat-step>
+
+        <!-- Step 6: Done -->
+        <mat-step>
+          <div class="max-w-md mx-auto p-4 text-center">
+            <ng-template matStepLabel>
+              <h5 class="text-gray-800 dark:text-gray-50 mb-4" style="margin-bottom: 0px;">Done</h5>
+            </ng-template>
+            <p class="text-gray-700 dark:text-gray-300 mb-6">You are now done.</p>
+
+            <!-- Submit Button -->
+            <div>
+              <button type="button" (click)="register()"
+                class="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:ring-4 focus:ring-green-300">
+                Submit
+              </button>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="mt-4 flex justify-between">
+              <button matStepperPrevious class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">
+                Back
+              </button>
+              <button (click)="stepper.reset()"
+                class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:ring-4 focus:ring-red-300">
+                Reset
+              </button>
+            </div>
+          </div>
+        </mat-step>
+      </mat-stepper>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div *ngIf="showSuccessModal"
+    class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center">
+    <div class="relative p-4 w-full max-w-md max-h-full">
+      <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">
+        <div class="p-4 md:p-5 text-center">
+          <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Success</h3>
+          <div class="mt-2">
+            <p class="text-sm text-gray-500 dark:text-gray-300">{{ successMessage }}</p>
+          </div>
+          <div class="mt-4">
+            <button (click)="closeSuccessModal()"
+              class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Modal -->
+  <div *ngIf="showErrorModal"
+    class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center">
+    <div class="relative p-4 w-full max-w-md max-h-full">
+      <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">
+        <div class="p-4 md:p-5 text-center">
+          <h3 class="text-lg leading-6 font-medium text-red-600 dark:text-red-400">Error</h3>
+          <div class="mt-2">
+            <p class="text-sm text-gray-500 dark:text-gray-300">{{ errorMessage }}</p>
+          </div>
+          <div class="mt-4">
+            <button (click)="closeErrorModal()"
+              class="px-4 py-2 bg-red-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Information Modal -->
+  <div *ngIf="showInfoModal"
+    class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center">
+    <div class="relative p-4 w-full max-w-md max-h-full">
+      <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">
+        <div class="p-4 md:p-5 text-center">
+          <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Information</h3>
+          <div class="mt-2">
+            <p class="text-sm text-gray-500 dark:text-gray-300">{{ infoMessage }}</p>
+          </div>
+          <div class="mt-4">
+            <button (click)="closeInfoModal()"
+              class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+/* pdf-viewer.component.scss */
+.pdf-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers canvas elements horizontally */
+  }
+  
+  .pdf-container canvas {
+    margin-bottom: 10px; /* Adds space between pages */
+    max-width: 100%; /* Ensures canvas doesn't exceed container width */
+    height: auto;    /* Maintains aspect ratio */
+  }
+  

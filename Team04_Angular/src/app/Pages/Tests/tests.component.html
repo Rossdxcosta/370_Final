@@ -1,0 +1,26 @@
+<!-- <div>
+    <select [(ngModel)]="selectedCountry" (ngModelChange)="onCountryChange()">
+        <option [ngValue]="null">Select Country</option>
+        <option *ngFor="let country of countries" [ngValue]="country">
+            {{country.country_Name}}
+        </option>
+    </select>
+
+    <select [(ngModel)]="selectedState" (ngModelChange)="onStateChange()" [disabled]="!selectedCountry">
+        <option [ngValue]="null">Select State</option>
+        <option *ngFor="let state of states" [ngValue]="state">
+            {{state.name}}
+        </option>
+    </select>
+
+    <select [(ngModel)]="selectedCity" [disabled]="!selectedState">
+        <option [ngValue]="null">Select City</option>
+        <option *ngFor="let city of cities" [ngValue]="city">
+            {{city.name}}
+        </option>
+    </select>
+</div>
+
+<button (click)="saveLocations()">Create locations</button> -->
+
+<button (click)="UploadTags()"> Test ListOutputs</button><button (click)="saveLocations()"> load locations</button>

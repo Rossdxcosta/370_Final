@@ -1,0 +1,50 @@
+<div tabindex="-1" aria-hidden="true"
+  class="fixed inset-0 z-50 text-center flex items-center justify-center bg-black bg-opacity-50 dark:bg-opacity-70">
+  <div class="relative p-4 w-full max-w-md max-h-full">
+    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+      <div class="p-4 md:p-5 text-left">
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200">
+          Are you sure you want to deactivate your account?
+        </h2>
+        <p class="mb-5 text-sm font-normal text-blue-500 dark:text-blue-300">(Your account is recoverable when trying to
+          log back in)</p>
+        <hr class="mb-5">
+        <form #reasonForm="ngForm">
+          <div class="mb-10">
+            <label for="categoryName" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter your
+              reason:</label>
+            <input [(ngModel)]="data.reason" type="text" id="categoryName" 
+              name="categoryName" placeholder="E.g. 'I dont need my account anymore'"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              ngModel required #reason="ngModel">
+                      <!-- Invalid condition -->
+            <p class="text-red-600 text-xs" style="margin-top: 0.5rem;" *ngIf="reason.invalid && reason.touched">
+              Please provide a reason for deactivation your account.
+            </p>
+          </div>
+          <div class="flex"> 
+            <button class="text-white w-1/2 justify-center content-center bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center" [mat-dialog-close]="data" cdkFocusInitial>Yes, I'm sure</button>
+            <button (click)="onNoClick()" type="button"
+              class="py-2.5 px-5 w-1/2 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+              No, cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <h2 mat-dialog-title>Confirm Deactivation Request</h2>
+<mat-dialog-content>
+  <p>Are you sure you want to deactivate your account?</p>
+  <mat-form-field class="w-100">
+    <mat-label>Enter Your Reason</mat-label>
+
+    <textarea matInput placeholder="I dont need this account anymore" [(ngModel)]="data.reason"
+        required></textarea>
+</mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()" color="primary">No Thanks</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+</mat-dialog-actions> -->

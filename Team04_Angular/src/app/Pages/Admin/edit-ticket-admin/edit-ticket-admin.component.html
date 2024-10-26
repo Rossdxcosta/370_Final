@@ -1,0 +1,346 @@
+<div id="popup-modal" tabindex="-1"
+  class="fixed z-50 inset-0 overflow-y-auto overflow-x-hidden flex flex-col justify-center items-center w-full md:inset-0 h-full max-h-full bg-gray-600 bg-opacity-50">
+  <div
+    class="relative z- p-5 w-8/12 top-10 min-h-4/5 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-2xl">
+    <h1 class="w-full text-lg text-center">Ticket #{{ticket.ticket_ID}}</h1>
+    <hr class="mb-10">
+    <div class="flex h-3/4 justify-between pb-5">
+      <div class="w-1/3 h-full flex flex-col justify-center content-center">
+        <form (ngSubmit)="onSubmit()" class="align-middle self-center w-full flex flex-col p-5" #ticketForm="ngForm">
+          <!-- Form fields for ticket details -->
+          <div class="mb-10">
+            <label for="ticketDescription"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">Ticket Description</label>
+            <textarea [(ngModel)]="ticket.ticket_Description" name="ticketDescription" id="ticketDescription" rows="4"
+              class="peer max-h-28 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Write your thoughts here..." ngModel required #ticketDescription="ngModel"></textarea>
+            <!-- Invalid condition -->
+            <p class="mt-2 text-red-600 text-xs" style="margin-top: 0.5rem;"
+              *ngIf="ticketDescription.invalid && ticketDescription.touched">
+              Please enter a ticket description
+            </p>
+          </div>
+
+          <div class="mb-10">
+            <label for="ticketStatus" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">Ticket
+              Status</label>
+            <select [(ngModel)]="ticket.ticket_Status_ID" name="ticketStatus" id="ticketStatus"
+              class="peer bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              ngModel required #ticketStatus="ngModel">
+              <option *ngFor="let status of ticketStatuses" [value]="status.ticket_Status_ID">
+                {{status.status_Name}}
+              </option>
+            </select>
+            <!-- Invalid condition -->
+            <p class="mt-2 text-red-600 text-xs" style="margin-top: 0.5rem;"
+              *ngIf="ticketStatus.invalid && ticketStatus.touched">
+              Please select a ticket status
+            </p>
+          </div>
+
+
+          @if (userRole.toLowerCase() != ("employee" || "client" || "guest")) {
+          <div class="mb-10">
+            <label for="priotity"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">Priority</label>
+            <select [(ngModel)]="ticket.priority_ID" name="priority" id="priotity"
+              class="peer bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              ngModel required #ticketPriority="ngModel">
+              <option *ngFor="let priority of priorities" [value]="priority.priority_ID">
+                {{priority.priority_Name}}
+              </option>
+            </select>
+            <!-- Invalid condition -->
+            <p class="mt-2 text-red-600 text-xs" style="margin-top: 0.5rem;"
+              *ngIf="ticketPriority.invalid && ticketPriority.touched">
+              Please set the tickets priority
+            </p>
+          </div>
+          } @else {
+          <div class="mb-10">
+            <label for="priotity"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">Priority</label>
+            <select disabled [(ngModel)]="ticket.priority_ID" name="priority" required id="priotity"
+              class="peer bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              <option *ngFor="let priority of priorities" [value]="priority.priority_ID">
+                {{priority.priority_Name}}
+              </option>
+            </select>
+          </div>
+          }
+
+          @if (userRole.toLowerCase() != ("employee" || "client" || "guest")) {
+          <div class="mb-10 relative">
+            <label for="employee"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">Employee</label>
+            <input #employeeInput id="employee" type="text" [(ngModel)]="employeeFilter" (focus)="openDropdown()"
+              (input)="filterEmployees()" (keydown)="onKeyDown($event)" placeholder="Select employee"
+              class="peer bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              required #ticketEmployee="ngModel" name="employee" autocomplete="off" />
+            <!-- Dropdown List -->
+            <ul *ngIf="showDropdown && filteredEmployees.length > 0"
+              class="absolute z-10 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 w-full max-h-60 overflow-auto rounded-lg mt-1">
+              <li *ngFor="let employee of filteredEmployees; let i = index" (click)="selectEmployee(employee)"
+                [class.bg-blue-100]="i === activeItemIndex"
+                class="px-4 py-2 hover:bg-blue-100 dark:hover:bg-gray-600 cursor-pointer">
+                {{ employee.user_Name }} {{ employee.user_Surname }}
+              </li>
+            </ul>
+            <!-- No Results Found -->
+            <div *ngIf="showDropdown && filteredEmployees.length === 0"
+              class="absolute z-10 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 w-full rounded-lg mt-1 px-4 py-2">
+              No results found
+            </div>
+            <!-- Invalid condition -->
+            <p class="text-red-600 text-xs" style="margin-top: 0.5rem;" *ngIf="ticketEmployee.invalid && ticketEmployee.touched">
+              Please assign the ticket to an employee
+            </p>
+          </div>
+
+          }@else {
+          <label for="employee"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">Employee</label>
+          <select disabled [(ngModel)]="ticket.assigned_Employee_ID" name="employee" required id="employee"
+            class="mb-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option *ngFor="let employee of employees" [value]="employee.user_ID">
+              {{employee.user_Name}} {{employee.user_Surname}}
+            </option>
+          </select>
+          }
+
+          @if (userRole.toLowerCase() == "employee") {
+          <button
+            class="flex cursor-pointer disabled:opacity-50 disabled:hover:bg-orange-700 justify-center w-full text-center m-0 align-middle focus:outline-none text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-orange-600 dark:hover:bg-orange-700 dark:focus:ring-orange-800"
+            [disabled]="ticketForm.invalid" (click)="openEscalateModal()"><i
+              class="fa-solid fa-arrow-up-from-bracket mr-2"></i>
+            Escelate Ticket</button>
+          }
+        </form>
+      </div>
+
+      <div class="w-1/3 p-5">
+        <div *ngIf="!toDoListCreated" class="flex flex-col w-full h-full text-center content-center justify-center">
+          <button class="align-middle self-center bg-gray-200 text-gray-500 hover:bg-gray-300 text-5xl"
+            style="height: 5rem; width: 5rem; aspect-ratio: 1/1; border-radius: 15px;"
+            (click)="createToDoList()">+</button>
+          <p class="pt-5">Create To-Do List</p>
+        </div>
+        <div *ngIf="toDoListCreated">
+          <div class="flex flex-col">
+            <div class="flex justify-between items-center">
+              <h4 class="p-3" style="margin-bottom: 0;">To-do List</h4>
+              <button type=button
+                class="w-fit h-fit focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-1 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                (click)="openDeleteListModal(ticket.ticket_ID!)">
+                <i class="fa-regular fa-square-minus mr-2"></i>
+                Remove To-do List</button>
+            </div>
+            <div *ngFor="let checklist of checklists; let i = index"
+              class="flex justify-center content-center align-middle text-center items-center py-2">
+              <input type="checkbox"
+                class="peer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                [(ngModel)]="checklist.is_Completed" name="checklistCompleted{{i}}">
+              <p class="align-middle p-0 m-0 px-3" style="margin-bottom: 0;">#{{i + 1}}</p>
+              <input type="text" id="first_name" [ngClass]="{'line-through': checklist.is_Completed}"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Fix issue..." [(ngModel)]="checklist.item_Description" name="to-do {{i}}" required />
+              <button
+                class="text-red-700 hover:bg-red-100 dark:hover:bg-red-900 dark:hover:bg-opacity-30 text-2xl flex justify-center items-center font-medium rounded-full text-center content-center p-3 ml-3"
+                style="aspect-ratio: 1/1; width: 10px; height: 10px; border-radius: 50px;"
+                (click)="removeChecklistItem(i, checklist.to_do_List_ID)"><i
+                  class="fa fa-trash-can text-red-700 dark:text-red-300"></i>
+              </button>
+            </div>
+            <div class="w-full flex text-center justify-center">
+              <button type="button"
+                class="text-green-700 hover:text-gray-100 flex justify-center items-center border-2 border-green-700 hover:bg-green-600 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:border-green-600 dark:text-green-600 dark:hover:text-gray-50 dark:hover:bg-green-600 content-center float-end"
+                style="aspect-ratio: 1/1; width: 45px; border-radius: 50px;" *ngIf="checklists.length < 4"
+                (click)="addChecklistItem()">+</button>
+            </div>
+          </div>
+          <div>
+            <h4 class="p-3">Notes</h4>
+            <div *ngFor="let note of notes; let j = index" class="flex justify-between align-middle">
+              <div class="flex flex-col w-full mb-3">
+                <textarea [(ngModel)]="note.note_Description" name="note {{j}}" required id="note {{j}}" rows="2"
+                  class="max-h-28 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Write your thoughts here...">
+                </textarea>
+              </div>
+              <div class="h-auto content-center">
+                <button
+                  class="text-red-700 hover:bg-red-100 dark:hover:bg-red-900 dark:hover:bg-opacity-30 text-2xl flex justify-center items-center font-medium rounded-full text-center content-center p-3 ml-3"
+                  style="aspect-ratio: 1/1; width: 10px; height: 10px; border-radius: 50px;"
+                  (click)="removeNoteItem(j, note.to_Do_Note_ID)"><i
+                    class="fa fa-trash-can text-red-700 dark:text-red-300"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="w-full flex text-center justify-center">
+            <button type="button"
+              class="text-green-700 hover:text-gray-100 flex justify-center items-center border-2 border-green-700 hover:bg-green-600 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:border-green-600 dark:text-green-600 dark:hover:text-gray-50 dark:hover:bg-green-600 content-center float-end"
+              style="aspect-ratio: 1/1; width: 45px; border-radius: 50px;" *ngIf="notes.length < 1"
+              (click)="addNote()">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="w-1/3 flex flex-col justify-center content-center">
+        <h4 class="w-full text-center text-xl">Time remaining before BREACH:</h4>
+        <div class="flex flex-col content-center w-full h-auto justify-center align-middle">
+          <ag-charts aria-disabled="true" [options]="chartData.options"
+            class="chart h-[23vh] w-auto self-center relative"></ag-charts>
+          <img src="../../../../assets/Images/watch.png" class="self-center absolute z-n1 opacity-30"
+            style="height: 26% !important; height: auto; aspect-ratio: 1/1;" alt="">
+        </div>
+        @if (secondsLeft < 1) { <h4
+          class="flex justify-center content-center gap-2 w-full text-center self-center text-lg text-red-600">BREACHED!
+          </h4>
+          }
+          @else {
+          @if (Days>0) {
+          <h4 class="flex justify-center content-center gap-2 w-full text-center self-center text-lg">Days: <h4
+              class="text-green-600">{{Days}}</h4> Hours: <h4 class="text-green-600">{{Hours}}</h4>
+          </h4>
+          }
+          @else if ( Hours>0) {
+          <h4 class="flex justify-center content-center gap-2 w-full text-center self-center text-lg">Hours: <h4
+              class="text-blue-600">{{Hours}}</h4> Minutes: <h4 class="text-blue-600">{{Minutes}}</h4>
+          </h4>
+          }
+          @else {
+          <h4 class="flex justify-center content-center gap-2 w-full text-center self-center text-lg">Minutes: <h4
+              class="text-orange-600">{{Minutes}}</h4> Seconds: <h4 class="text-orange-600">{{Seconds.toFixed(0)}}</h4>
+          </h4>
+          }
+          }
+          <h4 class="flex justify-center content-center gap-2 w-full text-center self-start text-lg">Client: <h4
+              class="text-green-600 dark:text-green-400">{{ticket.client.user_Name}} {{ticket.client.user_Surname}}</h4>
+          </h4>
+          <h4 class="flex justify-center content-center gap-2 w-full text-center self-start text-lg">Ticket has been
+            open for:<h4 class="text-gray-800 dark:text-white"><b>{{((timePassed/60)/60).toFixed(0)}}</b></h4> hours
+          </h4>
+      </div>
+    </div>
+    <hr class="mb-5">
+    <div class="button-group mt-8 w-full flex flex-row justify-between">
+      <button
+        class="w-1/2 cursor-pointer disabled:opacity-50 disabled:hover:bg-green-700 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+        [disabled]="ticketForm.invalid" type="submit" (click)="onSubmit(); saveToDoList();">
+        <i class="fa-regular fa-floppy-disk mr-2"></i>Save Changes</button>
+      <button type="button"
+        class="w-1/2 py-2.5 px-5 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-gray-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+        (click)="onCancel()"><i class="fa-solid fa-xmark mr-2"></i>Cancel</button>
+    </div>
+  </div>
+
+  <!-- Delete To Do List Modal -->
+  <div *ngIf="showDeleteListModal" tabindex="-1" aria-hidden="true"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 dark:bg-opacity-70">
+    <div class="relative p-4 w-full max-w-md max-h-full">
+      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+        <button type="button"
+          class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+          (click)="closeDeleteListModal()">
+          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+        <div class="p-4 md:p-5 text-center">
+          <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+          <h4 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this
+            to-do list?</h4>
+          <button (click)="confirmDeleteList()" type="button"
+            class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+            Yes, I'm sure
+          </button>
+          <button (click)="closeDeleteListModal()" type="button"
+            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+            No, cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Success Modal -->
+<div *ngIf="showSuccessModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+  <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
+    <div class="mt-3 text-center">
+      <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Success</h3>
+      <div class="mt-2 px-7 py-3">
+        <p class="text-sm text-gray-500 dark:text-gray-300">Ticket has been succesfully saved!</p>
+      </div>
+      <div class="items-center px-4 py-3">
+        <button (click)="closeSuccessModal()"
+          class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Error Modal -->
+<div *ngIf="showErrorModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+  <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
+    <div class="mt-3 text-center">
+      <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Error</h3>
+      <div class="mt-2 px-7 py-3">
+        <p class="text-sm text-gray-500 dark:text-gray-300">Failed to save ticket. Please try again later</p>
+      </div>
+      <div class="items-center px-4 py-3">
+        <button (click)="closeErrorModal()"
+          class="px-4 py-2 bg-red-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Escalation Modal -->
+<div *ngIf="showEscalationModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+  <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
+    <div class="mt-3 text-center">
+      <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Success</h3>
+      <div class="mt-2 px-7 py-3">
+        <p class="text-sm text-gray-500 dark:text-gray-300">Ticket has been succesfully Escalated!</p>
+      </div>
+      <div class="items-center px-4 py-3">
+        <button (click)="closeEscalationModal()"
+          class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmed Modal -->
+<div *ngIf="showDeleteConfirmedModal"
+  class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+  <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
+    <div class="mt-3 text-center">
+      <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">To-Do List Deleted</h3>
+      <div class="mt-2 px-7 py-3">
+        <p class="text-sm text-gray-500 dark:text-gray-300">The to-do list has succesfully been removed from the ticket.
+        </p>
+      </div>
+      <div class="items-center px-4 py-3">
+        <button (click)="closeDeleteConfirmedModal()"
+          class="px-4 py-2 bg-red-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

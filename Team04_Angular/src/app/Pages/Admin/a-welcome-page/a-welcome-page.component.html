@@ -1,0 +1,71 @@
+<div class="p-10 pb-0">
+    <div
+        class="w-full flex flex-col items-left p-6 mb-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700 mx-auto">
+        <!-- Ticket Management Heading -->
+        <h1 class="text-xl text-black dark:text-white">Statistics</h1>
+        <hr class="mb-10">
+        <div class="flex w-full">
+            @if (displayedStatistics.length < 1) { <h2 class="w-full text-center text-lg text-blue-500 dark:text-blue-300">Select
+                statistics in the Reporting panel</h2>
+                }@else{
+                    <div *ngFor="let stat of displayedStatistics" class="p-5 m-5 bg-gray-200 dark:bg-gray-700 rounded-xl w-full text-center">
+                        @if (stat.title.toLowerCase().includes('open tickets')) {
+                            <h4 class="text-lg text-gray-800 dark:text-gray-200"><b>{{ stat.title }}</b></h4>
+                            <p class="text-2xl text-purple-600 dark:text-purple-300"><b>{{ stat.value }}</b></p>
+                        }@else if (stat.title.toLowerCase().includes('low') || stat.title.toLowerCase().includes('closed')) {
+                            <h4 class="text-lg text-gray-800 dark:text-gray-200"><b>{{ stat.title }}</b></h4>
+                            <p class="text-2xl text-green-600 dark:text-green-300"><b>{{ stat.value }}</b></p>
+                        }
+                        @else if (stat.title.toLowerCase().includes('breached')) {
+                            <h4 class="text-lg text-gray-800 dark:text-gray-200"><b>{{ stat.title }}</b></h4>
+                            <p class="text-2xl text-red-600 dark:text-red-300"><b>{{ stat.value }}</b></p>
+                        }
+                        @else if (stat.title.toLowerCase().includes('reopened')) {
+                            <h4 class="text-lg text-gray-800 dark:text-gray-200"><b>{{ stat.title }}</b></h4>
+                            <p class="text-2xl text-yellow-500 dark:text-yellow-300"><b>{{ stat.value }}</b></p>
+                        }
+                        @else {
+                            <h4 class="text-lg text-gray-800 dark:text-gray-200"><b>{{ stat.title }}</b></h4>
+                            <p class="text-2xl text-blue-600 dark:text-blue-300"><b>{{ stat.value }}</b></p>
+                        }
+                    </div>
+                }
+        </div>
+    </div>
+</div>
+
+<!-- Graphs -->
+<div class="reporting-page">
+    <div class="p-10 pt-0">
+        <div class="w-full flex flex-col items-left p-6 mb-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700 mx-auto">
+            <h1 class="text-xl text-black dark:text-white">Charts</h1>
+            <hr class="mb-10">
+            <div class="flex min-w-full w-full">
+              @if (displayedCharts.length < 1) {
+                <h2 class="w-full text-center text-lg text-blue-500 dark:text-blue-300">Select charts in the Reporting panel</h2>
+              }@else{
+                <div class="visual-statistics w-full flex flex-wrap justify-around my-3">
+                  <div 
+                  class="chart-container m-2 p-3" 
+                  *ngFor="let chart of displayedCharts">
+                    <h4 class="text-gray-800 dark:text-gray-200">{{ chart.label }}</h4>
+                    <ag-charts [options]="chart.options" class="chart"></ag-charts>
+                  </div>
+                </div>
+              }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="reporting-page">
+    <div class="p-10 pt-0">
+        <div class="w-full flex flex-col p-6 mb-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700 mx-auto">
+            <h1 class="text-xl text-black dark:text-white">Calendar</h1>
+            <hr class="mb-10">
+            <div class="">
+                <app-calendar></app-calendar>
+            </div>
+        </div>
+    </div>
+</div>

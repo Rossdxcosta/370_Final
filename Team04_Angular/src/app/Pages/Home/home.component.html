@@ -1,0 +1,57 @@
+<app-navbar style="position: fixed; z-index :2;"></app-navbar>
+
+<div style="position: relative; z-index: 1;" class="flex justify-center align-middle items-center w-fit">
+    <!-- <div style="box-shadow: 0 0 400px rgba(0,0,0,1) inset; aspect-ratio: 2/0.95; width: 100%; position: absolute;"></div> -->
+    <!-- <img src="../assets/homemain.jpg" alt="Image of a BMW M3 touring car driving" style="aspect-ratio: 2/0.95; width: 100%; object-fit: cover;"> -->
+    <video autoplay loop>
+        <source src="../../../assets/Background/Background vid.mp4" type="video/mp4">
+    </video>
+    <!-- <img src="../../../assets/Background/Background vid.mp4" alt="Image of a BMW M3 touring car driving" style="width: 100vw; height: 100vh; background-size: cover;"> -->
+    <div class="flex flex-col absolute w-3/4 h-3/4 justify-center items-center align-middle z-3">
+        <div class="flex-col float-end flow-root">
+            <div class="lg:p-14 md:p-10 m-2 w-3/4 text-white flex flex-row shadow info-card text-start items-center rounded-xl">
+                <i class="fa-solid fa-robot align-self-center p-5" style="font-size: 25pt; padding-left: 0px !important;"></i>
+                <p style="font-size: 12pt;">Introducing our new Virtual Desktop Infrastructure (VDI) Support System! With our user-friendly chatbot, you can quickly get help for any VDI-related issues.</p>
+            </div>
+            <div class="lg:p-14 md:p-10 m-2 w-3/4 text-white flex flex-row shadow info-card text-end float-end rounded-xl">
+                <p style="font-size: 12pt;">Simply start a chat, and our intelligent assistant will guide you through troubleshooting steps or escalate the issue if needed. If the problem persists, the chatbot will automatically create a support ticket on your behalf, ensuring prompt attention from our technical team.</p>
+                <i class="fa-solid fa-ticket align-self-center p-5" style="font-size: 25pt; padding-right: 0px !important;"></i>
+            </div>
+        </div>
+    </div>
+    <div class="group/item absolute right-10 bottom-20 z-50 w-20 h-20 rounded-t-full rounded-l-full cursor-pointer bg-white bg-opacity-30 text-center content-center justify-center text-2xl font-bold text-gray-200 border-2 border-gray-200" (click)='video.classList.remove("invisible")'>
+        Help
+    </div>
+</div>
+
+<div #video class="invisible w-screen h-screen absolute top-0 left-0 z-40 flex justify-center content-center place-items-center" (click)="video.classList.add('invisible')">
+    <div class="group-hover/item:visible z-50" style="width: 70vw; height:auto; aspect-ratio: 16/9;">
+        <iframe class="w-full h-full" src="https://www.youtube.com/embed/-TQXreKMG1M" title="Home Page Registration Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+</div>
+
+
+
+<footer class="bg-gray-800 text-white shadow dark:bg-gray-900">
+    <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
+        <div class="sm:flex sm:items-center sm:justify-between">
+            <a href="#" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
+                <img src="../../../assets/ZA Hub Logo.webp" class="h-16" alt="Flowbite Logo" />
+                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">ZA IT Hub</span>
+            </a>
+            <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
+                <li>
+                    <a href="https://informaticsquintet.net/" class="hover:underline text-white me-4 md:me-6">About</a>
+                </li>
+                <li>
+                    <a routerLink="/login" class="hover:underline text-white me-4 md:me-6">Login</a>
+                </li>
+                <li>
+                    <a routerLink="/faq-list" class="hover:underline text-white">FAQ</a>
+                </li>
+            </ul>
+        </div>
+        <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+        <span class="block text-sm text-gray-200 sm:text-center dark:text-gray-400">© 2024 <a href="https://informaticsquintet.net/" class="hover:underline">Informatics Quintet™</a>. All Rights Reserved.</span>
+    </div>
+</footer>

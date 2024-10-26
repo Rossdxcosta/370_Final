@@ -1,0 +1,166 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@import 'flowbite/dist/flowbite.css';
+@import 'flowbite/dist/flowbite.min.css';
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+//These are custom paletts
+//use this website to get themes https://m2.material.io/inline-tools/color/
+$blue-palette: (
+ 50: #e3f3ff,
+ 100: #bce0ff,
+ 200: #90ceff,
+ 300: #62baff,
+ 400: #3daaff,
+ 500: #179cff,
+ 600: #1b8dfa,
+ 700: #1c7ae6,
+ 800: #1c69d4,
+ 900: #1a49b5,
+ // ... continues to 900
+ contrast: (
+   50: rgba(black, 0.87),
+   100: rgba(black, 0.87),
+   200: rgba(black, 0.87),
+   300: white,
+   // ... continues to 900
+ )
+);
+
+$red-palette: (
+ 50: #fee8e7,
+ 100: #ffc9bb,
+ 200: #ffa58f,
+ 300: #ff8062,
+ 400: #ff603f,
+ 500: #ff3b1d,
+ 600: #ff3419,
+ 700: #f82c13,
+ 800: #ea210d,
+ 900: #d20000,
+ // ... continues to 900
+ contrast: (
+   50: rgba(black, 0.87),
+   100: rgba(black, 0.87),
+   200: rgba(black, 0.87),
+   300: white,
+   // ... continues to 900
+ )
+);
+
+$lightBlue-palette: (
+ 50: #dde8f9,
+ 100: #acc5e9,
+ 200: #76a0d5,
+ 300: #317cc2,
+ 400: #0061b7,
+ 500: #0049ab,
+ 600: #0042a2,
+ 700: #003997,
+ 800: #00308c,
+ 900: #002078,
+ // ... continues to 900
+ contrast: (
+   50: rgba(black, 0.87),
+   100: rgba(black, 0.87),
+   200: rgba(black, 0.87),
+   300: white,
+   // ... continues to 900
+ )
+);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$SmartSupportAI-primary: mat.define-palette($blue-palette, 800);
+$SmartSupportAI-secondary: mat.define-palette($red-palette, 900);
+$SmartSupportAI-accent: mat.define-palette($lightBlue-palette, 50);
+
+// The warn palette is optional (defaults to red).
+$SmartSupportAI-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$SmartSupportAI-theme: mat.define-light-theme((
+  color: (
+    primary: $SmartSupportAI-primary,
+    secondary: $SmartSupportAI-secondary,
+    accent: $SmartSupportAI-accent,
+    warn: $SmartSupportAI-warn,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($SmartSupportAI-theme);
+
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; overflow-x: hidden; -ms-overflow-style: none;  /* IE and Edge */ scrollbar-width: none;  /* Firefox */}
+// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: 'Montserrat', sans-serif; }
+h1 { font-size: 2.25rem !important; line-height: 2.5rem !important; font-family: 'Montserrat', sans-serif !important; }
+h2 { font-size: 1.875rem !important; line-height: 2.25rem !important; font-family: 'Montserrat', sans-serif !important; }
+h3 { font-size: 1.5rem !important; line-height: 2rem !important; font-family: 'Montserrat', sans-serif !important; }
+h4 { font-size: 1.25rem !important; line-height: 1.75rem !important; font-family: 'Montserrat', sans-serif !important; }
+h5 { font-size: 1.125rem !important; line-height: 1.75rem !important; font-family: 'Montserrat', sans-serif !important; }
+h6 { font-size: 1rem !important; line-height: 1.5rem !important; font-family: 'Montserrat', sans-serif !important; }
+thead, #card-header { font-size: 1rem !important; line-height: 1.5rem !important; }
+// p { font-size: 0.875rem !important; line-height: 1rem !important; font-family: 'Montserrat', sans-serif !important;}
+
+// ---------------------------------------------------------------------------------------------------
+// .dark-theme {
+//   background-color: #121212;
+//   color: #ffffff;
+// }
+
+// .dark-theme .mat-form-field {
+//   background-color: #424242;
+//   color: #ffffff;
+// }
+
+// .dark-theme .mat-form-field-flex {
+//   background-color: #424242;
+//   color: #ffffff;
+// }
+
+// .dark-theme .mat-input-element {
+//   background-color: #424242;
+//   color: #ffffff;
+// }
+
+// .dark-theme .mat-datepicker-content {
+//   background-color: #424242;
+//   color: #ffffff;
+// }
+
+// .dark-theme .mat-calendar-body-cell-content {
+//   background-color: #424242;
+//   color: #ffffff;
+// }
+
+// .dark-theme .mat-calendar-body-selected {
+//   background-color: #616161;
+//   color: #ffffff;
+// }
+
+// .dark-theme .mat-calendar-body-active {
+//   background-color: #757575;
+//   color: #ffffff;
+// }

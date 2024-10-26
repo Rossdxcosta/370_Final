@@ -1,0 +1,61 @@
+$navbar-height: 75px;
+$sidebar-width: 7rem;
+
+// nav {
+//   background-color: #16588e;
+// }
+
+.navbar {
+  z-index: 1000;
+  position: fixed;
+  height: $navbar-height !important;
+}
+
+.sidebar {
+  position: fixed;
+  top: 6rem;
+  width: $sidebar-width;
+  height: calc(100vh - $navbar-height);
+  overflow-y: auto;
+}
+
+#sidebar {
+  height: 100%;
+}
+
+.main-content {
+  position: absolute;
+  left: $sidebar-width;
+  top: 6rem;
+  padding: 0px;
+  width: calc(100% - $sidebar-width);
+}
+
+.highlighted {
+  color: rgb(100, 100, 100);
+  background-color: rgb(229, 231, 235);
+}
+
+// Responsive adjustments
+@media (max-width: 991.98px) {
+  .sidebar {
+    position: static;
+    height: auto;
+  }
+
+  .main-content {
+    min-height: auto;
+  }
+}
+
+// button {
+//   border: 2px solid #ddefff;
+//   background-color: #ddefff;
+//   color: #16588e !important;
+//   font-weight: 500;
+// }
+
+// #logout-button {
+//   background-color: rgb(255, 0, 0);
+//   color: white !important;
+// }

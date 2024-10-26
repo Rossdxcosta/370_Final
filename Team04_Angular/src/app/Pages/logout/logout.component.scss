@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+// body {
+//     margin: 0;
+//     padding: 0;
+//     background-color: #020617;  
+// }
+
+// .logout-box {
+//     width: 30rem;
+//     height: 20rem;
+//     background: #020617;  
+//     color: #ffffff;
+//     font-family: 'Montserrat', sans-serif;
+//     padding: 40px;
+//     padding-top: 5rem;
+//     padding-bottom: 5rem;
+//     margin: 0px auto;
+//     box-sizing: border-box;
+//     border-radius: 10px;
+// }
+
+// h2 {
+//     margin: 0 0 30px;
+//     padding: 0;
+//     text-align: center;
+//     font-size: 1.5rem;
+//     font-weight: bold;
+//     letter-spacing: 1px;
+// }
+
+// p {
+//     text-align: center;
+//     margin-bottom: 30px;
+// }
+
+// .button-container {
+//     display: flex;
+//     justify-content: space-between;
+//     margin-top: 40px;
+// }
+
+button {
+    // color: #ffffff;
+    // background-color: #1e1e1e;  
+    // border: 1px solid transparent;  
+    // position: relative;
+    // display: inline-block;
+    // padding: 10px 20px;
+    // font-weight: bold;
+    // font-size: 16px;
+    text-decoration: none;
+    // text-transform: uppercase;
+    overflow: hidden;
+    // letter-spacing: 3px;
+    transition: .5s;
+    // cursor: pointer;
+}
+
+// button:hover {
+//     background-color: #ffffff;
+//     color: #1e1e1e;
+//     border-radius: 5px;
+// }
+
+// button span {
+//     position: absolute;
+//     display: block;
+// }
+
+button span:nth-child(1) {
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #fff);
+    animation: anim-1 1.5s linear infinite;
+}
+
+@keyframes anim-1 {
+    0% {
+        left: -100%;
+    }
+    
+    50%,
+    100% {
+        left: 100%;
+    }
+}
+
+button span:nth-child(2) {
+    top: -100%;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, #fff);
+    animation: anim-2 1.5s linear infinite;
+    animation-delay: .375s;
+}
+
+@keyframes anim-2 {
+    0% {
+        top: -100%;
+    }
+    
+    50%,
+    100% {
+        top: 100%;
+    }
+}
+
+button span:nth-child(3) {
+    bottom: 0%;
+    right: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(270deg, transparent, #fff);
+    animation: anim-3 1.5s linear infinite;
+    animation-delay: .75s;
+}
+
+@keyframes anim-3 {
+    0% {
+        right: -100%;
+    }
+    
+    50%,
+    100% {
+        right: 100%;
+    }
+}
+
+button span:nth-child(4) {
+    bottom: -100%;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(360deg, transparent, #fff);
+    animation: anim-4 1.5s linear infinite;
+    animation-delay: 1.125s;
+}
+
+@keyframes anim-4 {
+    0% {
+        bottom: -100%;
+    }
+    
+    50%,
+    100% {
+        bottom: 100%;
+    }
+}
+
+#cancel, #logout {
+    flex: 1;
+    margin: 0 10px;
+}

@@ -1,0 +1,55 @@
+<div class="d-flex flex-column align-items-center h-100">
+    <h1 class="float-start pt-5">Roles</h1>
+    <div class="row w-100 d-flex justify-content-center align-items-center">
+      <div class="col-10">
+        <input class="form-control shadow" style="height: 60px; border-radius: 50px;" type="search" placeholder="Search Role Name" [(ngModel)]="searchQuery" (input)="searchRoles()">
+      </div>
+      <div class="col-2">
+          <button class="btn btn-primary shadow p-3 m-3 float-end w-100" style="border-radius: 500px;" (click)="openAddModal()">Add Role</button>
+      </div>
+    </div>
+    <table class="table table-bordered table-light text-dark">
+      <thead>
+        <tr>
+          <th style="background-color: rgb(58, 58, 58) !important;"><h3 class="text-white m-0 p-0">Name</h3></th>
+          <th style="background-color: rgb(58, 58, 58) !important;"><h3 class="text-white m-0 p-0">Description</h3></th>
+          <th style="background-color: rgb(58, 58, 58) !important; width: 20%;"><h3 class="text-white m-0 p-0">Controls</h3></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let role of roles">
+          <td style="padding-left: 10px;">{{role.name}}</td>
+          <td style="padding-left: 10px;">{{role.role_Description}}</td>
+          <td>
+              <div class="row bg-transparent">
+                  <div class="col-6">
+                      <button class="btn btn-sm btn-warning ml-2 w-100 border-0 rounded-3" (click)="openEditModal(role)">EDIT</button>
+                  </div>
+                  <div class="col-6">
+                      <button class="btn btn-sm btn-danger ml-2 w-100 border-0 rounded-3" (click)="DeleteRole(role.id)">DELETE</button>
+                  </div>
+              </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+
+<ng-template #roleModal let-modal>
+    <div class="modal-header d-flex justify-content-center">
+      <h3 class="modal-title" id="roleModalLabel">{{ isEdit ? 'Edit Role' : 'Add Role' }}</h3>
+    </div>
+    <div class="modal-body container">
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-group p-4">
+          <label for="Name">Role Name</label>
+          <input type="text" id="Name" [(ngModel)]="currentRole.name" name="Name" class="form-control" required>
+        </div>
+        <div class="form-group p-4">
+          <label for="Description">Role Description</label>
+          <textarea id="Description" [(ngModel)]="currentRole.role_Description" name="Description" class="form-control" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary m-4">{{ isEdit ? 'Save Changes' : 'Add Role' }}</button>
+      </form>
+    </div>
+  </ng-template>

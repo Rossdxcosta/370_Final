@@ -1,0 +1,6 @@
+$navbar-height: 75px;
+$sidebar-width: 12rem;
+
+.tab{
+    width: calc(100vw - $sidebar-width);
+}

@@ -1,0 +1,25 @@
+<body class="m-0 p-0 bg-gray-100 dark:bg-gray-800">
+  <div class="w-[30rem] h-[20rem] p-10 pt-20 pb-20 box-border m-0 rounded-l bg-gray-100 dark:bg-gray-900">
+    <h2 class="dark:text-white text-center mb-20">Logout</h2>
+    <p class="dark:text-white text-center mb-10">Are you sure you want to logout?</p>
+    <div class="flex justify-between mt-10">
+      <button id="cancel" (click)="onCancel()" 
+        class="border-[1px] border-solid border-transparent relative inline-block py-3 px-5 font-semibold text-base uppercase cursor-pointer :bg-gray-900 text-white dark:text-gray-900 dark:bg-gray-200 bg-gray-900 rounded-md">
+        <span class="absolute block"></span>
+        <span class="absolute block"></span>
+        <span class="absolute block"></span>
+        <span class="absolute block"></span>
+        Cancel
+      </button>
+      <button id="logout" (click)="onConfirm()"
+      class="bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white border-[1px] border-solid border-transparent relative inline-block py-3 px-5 font-semibold text-base uppercase cursor-pointer
+      hover:bg-gray-900 hover:text-white hover:dark:text-gray-900 hover:dark:bg-gray-200 hover:rounded-md">
+      <span class="absolute block"></span>
+      <span class="absolute block"></span>
+      <span class="absolute block"></span>
+      <span class="absolute block"></span>
+        Logout
+      </button>
+    </div>
+  </div>
+</body>

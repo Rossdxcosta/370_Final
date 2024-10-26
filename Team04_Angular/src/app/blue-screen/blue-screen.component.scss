@@ -1,0 +1,62 @@
+#page {
+    display: table;
+    height: 100%;
+    margin: 0 auto;
+    margin-top: -10px;
+    width: 75%;
+    font-size: 1.9vh;
+}
+
+#container {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+h1, h2, h3, h4, h5 {
+    font-weight: normal;
+    padding: 0;
+    margin: 25px 0;
+    margin-top: 0;
+    font-weight: 300;
+}
+
+h1 {
+    font-size: 6.5em;
+    margin-bottom: 10px;
+}
+
+h2 {
+    font-size: 1.5em;
+}
+
+h4 {
+    font-size: 1.4em;
+    line-height: 1.5em;
+}
+
+h5 {
+    font-size: 1.3em;
+    line-height: 1.1em;
+}
+
+#details {
+    display: flex;
+    flex-flow: row;
+    flex-wrap: nowrap;
+    padding-top: 10px;
+}
+
+#image {
+    background: white;
+    padding: 5px;
+    line-height: 0;
+}
+
+#image img {
+    width: 9.8em;
+    height: 9.8em;
+}
+
+#stopcode {
+    padding-left: 10px;
+}

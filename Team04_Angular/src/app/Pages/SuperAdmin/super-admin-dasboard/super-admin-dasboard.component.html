@@ -1,0 +1,119 @@
+<!------------------------------------ NAVBAR START ------------------------------------------->
+
+<nav class="fixed w-full z-50 h-24 bg-gray-200 border-gray-200 dark:bg-gray-900">
+  <div class="max-w-screen flex flex-wrap items-center justify-between px-4 py-2">
+    <!-- Username -->
+    <h1 class="text-black dark:text-white cursor-pointer" style="margin-bottom: 0;" onclick="location.reload()">{{username}}</h1>
+    <!-- Super Admin -->
+    <div class="absolute left-1/2 transform -translate-x-1/2">
+      <span class="text-2xl font-semibold whitespace-nowrap dark:text-white cursor-pointer" onclick="location.reload()">Super Administrator</span>
+    </div>
+    <div class="flex items-end">
+      <!-- Dropdown menu -->
+      <app-profile-icon class="relative float-end m-2" (click)="showMenuModal()" style="z-index: 999;"></app-profile-icon>
+      <div *ngIf="showMenu" class="rounded-xl focus relative inline-block text-left bg-grey-100 dark:bg-grey-700">
+        <div class="origin-top-right absolute right-0 w-56 rounded-xl shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+          <div class="rounded-xl">
+            <button (click)="setDarkMode()" class="rounded-t-xl w-full py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+              <span *ngIf="!darkMode()" class="material-icons">dark_mode</span>
+              <span *ngIf="darkMode()" class="material-icons">light_mode</span>
+            </button>
+            <button class="w-full py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" (click)="updateUser()">Profile</button>
+            <button class="w-full py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" (click)="downloadManuals()">Manuals</button>
+            <button class="w-full py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" (click)="openDialog(userDRequest)">Deactivate</button>
+            <button class="w-full py-2.5 px-5 text-sm font-medium text-white focus:outline-none bg-red-700 border border-gray-200 hover:bg-red-800 dark:bg-red-700 dark:hover:bg-red-800 dark:focus:ring-red-900" (click)="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!------------------------------------- NAVBAR END -------------------------------------------->
+
+  <!-------------------------------- Sidebar Start ------------------------------------------->
+  <div (click)="closeMenuModal()" class="top-24 container-fluid">
+    <div class="row">
+      <div
+        class="col-2 p-0 sidebar bg-gray-200 border-gray-200 dark:bg-gray-900 text-black dark:text-white bg-opacity-50 dark:bg-opacity-95">
+        <div class="card justify-content-between h-100" id="sidebar">
+          <div class="flex flex-row">
+            <div class="flex flex-col w-full justify-center align-middle items-center">
+              <button
+                class="group/item h-36 btn btn-outline-light w-full text-dark text-start p-3 flex flex-col justify-center align-middle items-center hover:text-gray-600 hover:dark:text-gray-300 focus:bg-gray-200 dark:focus:bg-gray-800">
+                <i class="fa fa-users text-3xl mx-auto pb-2" aria-hidden="true"></i>
+                <p class="text-xs mx-auto text-center">Users</p>
+                <div class="w-96 group/edit border-2 border-gray-300 dark:border-gray-500 invisible group-hover/item:visible absolute rounded-xl bg-gray-100 dark:bg-gray-700 tab-group top-2">
+                  <div (click)="LoadAdminTable()" class="p-3 rounded-xl bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 text-md">Administrators</div>
+                  <div (click)="LoadDepartmentTable()" class="p-3 rounded-xl bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 text-md">Departments</div>
+                  <div (click)="LoadRoleRequestTable()" class="p-3 rounded-xl bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 text-md">Admin Account Requests</div>
+                  <div (click)="LoadUserRoleTable()" class="p-3 rounded-xl bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 text-md">User Roles</div>
+                  <div (click)="LoadUserFeedback()" class="p-3 rounded-xl bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 text-md">User Feedback</div>
+                  <div (click)="LoadAccountRequestTable()" class="p-3 rounded-xl bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 text-md">Account Requests</div>
+                  <div (click)="LoadSoftwareReq()" class="p-3 rounded-xl bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 text-md">VDI Requests</div>
+                  <div (click)="LoadDeactivateReqTable()" class="p-3 rounded-xl bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 text-md">Account Deactivation Requests</div>
+                  <div (click)="LoadCompany()" class="p-3 rounded-xl bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 text-md">Company Manager</div>
+                </div>
+              </button>
+
+              <button
+                class="group/item h-36 btn btn-outline-light w-full text-dark text-start p-3 flex flex-col justify-center align-middle items-center hover:text-gray-600 hover:dark:text-gray-300 focus:bg-gray-200 dark:focus:bg-gray-800">
+                <i class="fa fa-ticket text-3xl mx-auto pb-2" aria-hidden="true"></i>
+                <p class="text-xs mx-auto text-center">Tickets</p>
+                <div class="w-96 group/edit border-2 border-gray-300 dark:border-gray-500 invisible group-hover/item:visible absolute rounded-xl bg-gray-100 dark:bg-gray-700 tab-group">
+                  <div (click)="LoadTicketTable()" class="p-3 rounded-xl bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 text-md">Ticket Manager</div>
+                  <div (click)="LoadEscalationRequests()" class="p-3 rounded-xl bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 text-md">Escelation Requests</div>
+                  <div (click)="LoadTicketGroups()" class="p-3 rounded-xl bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 text-md">Ticket Groups</div>
+                  <div (click)="LoadTagTable()" class="p-3 rounded-xl bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 text-md">Ticket Tags</div>
+                </div>
+              </button>
+
+              
+              <button
+                class="h-36 btn btn-outline-light w-full text-dark text-start p-3 flex flex-col justify-center align-middle items-center hover:text-gray-600 hover:dark:text-gray-300 focus:bg-gray-200 dark:focus:bg-gray-800"
+                (click)="LoadReporting()">
+                <i class="fa fa-chart-bar text-3xl mx-auto pb-2" aria-hidden="true"></i>
+                <p class="text-xs mx-auto text-center">Reporting</p>
+              </button>
+
+              <button
+                class="group/item h-36 btn btn-outline-light w-full text-dark text-start p-3 flex flex-col justify-center align-middle items-center hover:text-gray-600 hover:dark:text-gray-300 focus:bg-gray-200 dark:focus:bg-gray-800">
+                <i class="fa fa-laptop-code text-3xl mx-auto pb-2" aria-hidden="true"></i>
+                <p class="text-xs mx-auto text-center">Software / VDI</p>
+                <div class="w-96 group/edit border-2 border-gray-300 dark:border-gray-500 invisible group-hover/item:visible absolute rounded-xl bg-gray-100 dark:bg-gray-700 tab-group">
+                  <div (click)="LoadSoftware()" class="p-3 rounded-xl bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 text-md">Software Manager</div>
+                  <div (click)="LoadVDI()" class="p-3 rounded-xl bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 text-md">VDI Manager</div>
+                </div>
+              </button>
+
+              <button
+                class="group/item h-36 btn btn-outline-light w-full text-dark text-start p-3 flex flex-col justify-center align-middle items-center hover:text-gray-600 hover:dark:text-gray-300 focus:bg-gray-200 dark:focus:bg-gray-800">
+                <i class="fa fa-question-circle text-3xl mx-auto pb-2" aria-hidden="true"></i>
+                <p class="text-xs mx-auto text-center">Configurables</p>
+                <div class="w-96 group/edit border-2 border-gray-300 dark:border-gray-500 invisible group-hover/item:visible absolute rounded-xl bg-gray-100 dark:bg-gray-700 tab-group">
+                  <div (click)="LoadFAQTable()" class="p-3 rounded-xl bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 text-md">FAQs</div>
+                  <div (click)="LoadTrainChatbot()" class="p-3 rounded-xl bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 text-md">Train Chatbot</div>
+                  <div (click)="LoadBreachTimer()" class="p-3 rounded-xl bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 text-md">Ticket Breach Timer</div>
+                </div>
+              </button>
+
+              <button
+                class="h-36 btn btn-outline-light w-full text-dark text-start p-3 flex flex-col justify-center align-middle items-center hover:text-gray-600 hover:dark:text-gray-300 focus:bg-gray-200 dark:focus:bg-gray-800"
+                (click)="LoadAuditLogTable()">
+                <i class="fa fa-file-alt text-3xl mx-auto pb-2" aria-hidden="true"></i>
+                <p class="text-xs mx-auto text-center">Audit Log</p>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-------------------------------- Sidebar End --------------------------------------------->
+
+      <!--------------------------- Dynamic Content Start ---------------------------------------->
+      <div (click)="closeMenuModal()" class="main-content col-10 bg-white dark:bg-gray-600 min-h-full">
+        <div #dynamicComponentContainer>
+        </div>
+      </div>
+      <!--------------------------- Dynamic Content End ---------------------------------------->
+    </div>
+  </div>

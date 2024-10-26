@@ -1,0 +1,91 @@
+<!-- Main container -->
+<div class="w-full min-h-screen bg-gray-50 dark:bg-gray-800 p-8">
+  <!-- Back button -->
+   @if (!loggedIn) {
+    <button routerLink="/"
+      class="mb-6 flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+      </svg>
+      Back to Home
+    </button>
+   }
+
+  <!-- Content container -->
+  <div class="mt-20 w-10/12 mx-auto bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden">
+    <!-- Header container -->
+    <div class="w-full py-6 px-8 bg-blue-600 dark:bg-blue-900 flex flex-col justify-center items-center h-48">
+      <!-- FAQ Icon -->
+      <i class="fa-regular fa-circle-question text-5xl text-white dark:text-gray-300 mb-4"></i>
+      <!-- FAQ Heading -->
+      <h1 class="text-3xl font-bold text-white dark:text-gray-300 text-center" style="margin-bottom: 0px;">Frequently
+        Asked Questions</h1>
+    </div>
+
+    <!-- Search container -->
+    <div class="p-8 border-b border-gray-200 dark:border-gray-600">
+      <div class="relative">
+        <!-- Search Icon -->
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </div>
+        <!-- Search Input -->
+        <input
+          class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
+          type="search" placeholder="Search for your FAQ answer" [(ngModel)]="searchQuery" (input)="filterFAQs()">
+      </div>
+    </div>
+
+    <!-- Accordions -->
+    <div class="divide-y divide-gray-200 dark:divide-gray-600">
+      <div *ngFor="let category of filteredFaqCategories; let i = index" class="py-6 px-8">
+        <h2 [id]="'accordion-heading-' + category.CategoryName">
+          <button type="button"
+            class="flex items-center justify-between w-full text-left text-lg font-semibold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none"
+            [attr.aria-expanded]="activeIndex === i" (click)="toggleAccordion(i)">
+            <span class="text-2xl">{{ category.CategoryName }}</span>
+            <svg class="w-6 h-6 transform transition-transform duration-200"
+              [ngClass]="{'rotate-180': activeIndex === i}" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+        </h2>
+
+        <div [id]="'accordion-content-' + category.CategoryName" [class.hidden]="activeIndex !== i"
+          class="mt-4 space-y-4">
+          <div *ngFor="let faq of category.FAQs" class="rounded-lg border border-gray-200 dark:border-gray-600">
+            <h3>
+              <button type="button"
+                class="flex items-center justify-between w-full p-5 font-medium text-left text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600"
+                [attr.aria-expanded]="activeFAQ === faq.faqId" (click)="toggleFAQ(faq.faqId)">
+                <span class="text-lg">{{ faq.question }}</span>
+                <svg class="w-5 h-5 ml-2 shrink-0" [ngClass]="{'rotate-180': activeFAQ === faq.faqId}"
+                  fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clip-rule="evenodd"></path>
+                </svg>
+              </button>
+            </h3>
+            <div [id]="'faq-content-' + faq.faqId" [class.hidden]="activeFAQ !== faq.faqId"
+              class="p-5 border-t border-gray-200 dark:border-gray-600">
+              <p class="mb-2 text-gray-600 dark:text-gray-300">{{ faq.answer }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dark Mode Button -->
+  <button (click)="setDarkMode()"
+    class="fixed right-5 top-5 py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none hover:text-blue-700 focus:z-10 dark:text-gray-400 dark:hover:text-white">
+    <span *ngIf="!darkMode()" class="material-icons">dark_mode</span>
+    <span *ngIf="darkMode()" class="material-icons">light_mode</span>
+  </button>
+</div>

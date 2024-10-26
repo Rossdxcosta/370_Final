@@ -1,0 +1,179 @@
+<!-- Main container -->
+<div class="w-full min-h-screen flex flex-col items-center bg-white dark:bg-gray-600 p-10 m-0">
+  <!-- Header container -->
+  <div class="w-full py-6 mx-auto">
+    <!-- Ticket Tag Heading -->
+    <h1 class="text-black dark:text-white">Audit Logs</h1>
+    <hr class="mb-16">
+
+    <!-- Search Tags Section -->
+    <div class="w-full flex justify-between items-center">
+      <div class="relative w-[26%] min-w-[21rem]">
+        <i class="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-800 dark:text-gray-300"></i>
+        <input
+          class="w-full bg-gray-50 text-gray-800 dark:bg-gray-600 dark:text-white rounded-xl p-3 pl-10 placeholder:text-gray-800 placeholder:dark:text-gray-300 dark:border-gray-300"
+          type="search" placeholder="Search audit log (E.g. Username, Ticket_Table, 2024-07-03)" [(ngModel)]="searchQuery"
+          (input)="searchLog()">
+      </div>
+      <div>
+        <h3 class="text-gray-800 dark:text-gray-50" style="margin-bottom: 0px;">Showing {{ displayedLogs.length }}
+          results</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table Container -->
+  <div *ngIf="!isLoading && isTableData" class="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+      <!-- Table Header -->
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+          <th scope="col" class="px-6 py-3">User</th>
+          <th scope="col" class="px-6 py-3">Change Type</th>
+          <th scope="col" class="px-6 py-3">Table</th>
+          <th scope="col" class="px-6 py-3">Old Value</th>
+          <th scope="col" class="px-6 py-3">New Value</th>
+          <th scope="col" class="px-6 py-3">Affected Columns</th>
+          <th scope="col" class="px-6 py-3">Affected Record ID</th>
+          <th scope="col" class="px-6 py-3">Date of Change</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let log of displayedLogs" (click)="openLogModal(log)"
+          class="odd:bg-white odd:hover:bg-gray-100 odd:dark:bg-gray-900 odd:dark:hover:bg-gray-700 even:bg-gray-50 even:hover:bg-gray-100 even:dark:bg-gray-800 border-b even:dark:hover:bg-gray-700 dark:border-gray-700 cursor-pointer">
+          <td class="px-6 py-4">{{ log.userId || 'Not Applicable' }}</td>
+          <td class="px-6 py-4">{{ log.type || 'Not Applicable' }}</td>
+          <td class="px-6 py-4">{{ log.tableName || 'Not Applicable' }}</td>
+          <td class="px-6 py-4">{{ formatJson(log.oldValues) }}</td>
+          <td class="px-6 py-4">{{ formatJson(log.newValues) }}</td>
+          <td class="px-6 py-4">{{ formatList(log.affectedColumns) }}</td>
+          <td class="px-6 py-4">{{ formatJson(log.primaryKey) }}</td>
+          <td class="px-6 py-4">{{ log.dateTime || 'Not Applicable' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination Controls -->
+    <div
+      class="flex items-center justify-between w-full py-4 px-4 text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400 rounded-md">
+      <!-- Page Size Selector -->
+      <div class="flex items-center space-x-2">
+        <span class="text-sm text-gray-500 dark:text-gray-300">On every page</span>
+        <select [(ngModel)]="pageSize" (change)="onPageSizeChange()"
+          class="block p-2 text-sm rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-300">
+          <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
+        </select>
+      </div>
+
+      <!-- Pagination Summary -->
+      <div class="text-sm text-gray-500 dark:text-gray-300">
+        Showing {{ pageIndex * pageSize + 1 }}-{{ (pageIndex + 1) * pageSize > totalItems ? totalItems : (pageIndex + 1)
+        *
+        pageSize }} of {{ totalItems }}
+      </div>
+
+      <!-- Pagination Buttons -->
+      <ul class="inline-flex items-center space-x-0 rtl:space-x-reverse text-sm h-8">
+        <li>
+          <!-- Previous Button -->
+          <button (click)="onPageChange(pageIndex - 1)" [disabled]="pageIndex === 0"
+            class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed">
+            Previous
+          </button>
+        </li>
+        <!-- Pagination Numbers -->
+        <li *ngFor="let page of [].constructor(totalPages); let i = index">
+          <button (click)="onPageChange(i)" [class.text-blue-600]="i === pageIndex" [class.bg-blue-50]="i === pageIndex"
+            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            {{ i + 1 }}
+          </button>
+        </li>
+        <li>
+          <!-- Next Button -->
+          <button (click)="onPageChange(pageIndex + 1)" [disabled]="pageIndex >= totalPages - 1"
+            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed">
+            Next
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Add loading below the pagination -->
+  <div *ngIf="isLoading" class="flex justify-center">
+    <div role="status">
+      <svg aria-hidden="true" class="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+        viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+          fill="currentColor" />
+        <path
+          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+          fill="currentFill" />
+      </svg>
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Add isData below isLoading -->
+  <div *ngIf="!isLoading && (!isData || !isTableData)"
+    class="flex items-center p-4 text-sm text-gray-800 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600"
+    role="alert">
+    <svg class="flex-shrink-0 inline w-4 h-4 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor" viewBox="0 0 20 20">
+      <path
+        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+    </svg>
+    <span class="sr-only">Info</span>
+    <div>
+      <span class="font-medium">No transactions to display</span>
+    </div>
+  </div>
+</div>
+
+<!-- Log Modal -->
+<div *ngIf="showLogModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="relative p-4 w-full max-w-2xl h-auto">
+    <div class="relative bg-white rounded-lg shadow-lg dark:bg-gray-800">
+
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between p-5 border-b border-gray-200 rounded-t-lg dark:border-gray-700">
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mx-auto">
+          Audit Log Details
+        </h3>
+        <button type="button"
+          class="absolute top-4 right-4 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-full text-sm p-1.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+          (click)="closeLogModal()">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              clip-rule="evenodd"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 space-y-6 text-gray-700 dark:text-gray-300">
+        <p><span class="font-bold">User:</span> {{ selectedLog?.userId || 'Not Applicable' }}</p>
+        <p><span class="font-bold">Change Type:</span> {{ selectedLog?.type || 'Not Applicable' }}</p>
+        <p><span class="font-bold">Table Name:</span> {{ selectedLog?.tableName || 'Not Applicable' }}</p>
+        <p><span class="font-bold">Old Values:</span></p>
+        <pre
+          class="bg-gray-100 p-4 rounded-lg text-sm text-gray-600 dark:bg-gray-700 dark:text-gray-200">{{ formatJson(selectedLog!.oldValues) }}</pre>
+        <p><span class="font-bold">New Values:</span></p>
+        <pre
+          class="bg-gray-100 p-4 rounded-lg text-sm text-gray-600 dark:bg-gray-700 dark:text-gray-200">{{ formatJson(selectedLog!.newValues) }}</pre>
+        <p><span class="font-bold">Affected Columns:</span> {{ formatList(selectedLog!.affectedColumns) }}</p>
+        <p><span class="font-bold">Affected Record ID:</span> {{ formatJson(selectedLog!.primaryKey) }}</p>
+        <p><span class="font-bold">Date of Change:</span> {{ selectedLog?.dateTime || 'Not Applicable' }}</p>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="flex items-center justify-end p-6 border-t border-gray-200 dark:border-gray-700">
+        <button type="button"
+          class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
+          (click)="closeLogModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

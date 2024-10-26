@@ -1,0 +1,43 @@
+<div class="p-10 pb-0">
+  <div
+    class="w-full flex flex-col items-left p-6 mb-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700 mx-auto">
+    <h1 class="text-xl text-black dark:text-white">My Performance Statistics</h1>
+    <hr class="mb-10">
+    <div class="flex w-full flex-wrap">
+      <div *ngFor="let stat of [
+        {title: 'Current Open Tickets', value: openTickets},
+        {title: 'Current Breached Tickets', value: breachedTickets},
+        {title: 'Average Resolution Time (Hours)', value: averageResolutionTime | number:'1.2-2'},
+        {title: 'Low Priority Tickets', value: lowPriorityTickets},
+        {title: 'Medium Priority Tickets', value: mediumPriorityTickets},
+        {title: 'High Priority Tickets', value: highPriorityTickets},
+        {title: 'Current Assigned Tickets', value: currentAssignedTickets}
+      ]" class="p-5 m-2 bg-gray-200 dark:bg-gray-700 rounded-xl flex-1 text-center" style="min-width: 200px;">
+        <h4 class="text-lg text-gray-800 dark:text-gray-200"><b>{{ stat.title }}</b></h4>
+        <p class="text-2xl text-blue-600 dark:text-blue-300"><b>{{ stat.value }}</b></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="reporting-page">
+  <div class="p-10 pt-0">
+  <div
+    class="w-full flex flex-col items-left p-6 mb-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700 mx-auto">
+    <h1 class="text-xl text-black dark:text-white">Performance Graphs</h1>
+    <hr class="mb-10">
+    <div class="visual-statistics w-full grid justify-center items-center grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="chart-container flex justify-center items-center" *ngFor="let chart of [
+        {label: 'Tickets Assigned vs Closed (Past Month)', options: ticketsAssignedVsClosedOptions},
+        {label: 'Ticket Status Distribution', options: ticketStatusDistributionOptions},
+        {label: 'Average Resolution Time Over a Month', options: averageResolutionTimeTrendOptions},
+        {label: 'Closed Tickets Past Week', options: closedTicketsPastWeekOptions},
+      ]">
+        <h4 class="text-gray-800 dark:text-gray-200 mb-2">{{ chart.label }}</h4>
+        <div class="chart-wrapper flex justify-center align-center">
+          <ag-charts [options]="chart.options"></ag-charts>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

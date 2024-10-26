@@ -1,0 +1,31 @@
+$navbar-height: 75px;
+
+.navbar {
+  z-index: 1000;
+  position: fixed;
+  height: $navbar-height !important;
+}
+
+.main-content {
+  position: absolute;
+  top: 6rem;
+  padding: 0px;
+  width: 100%;
+}
+
+.highlighted {
+  color: rgb(100, 100, 100);
+  background-color: rgb(229, 231, 235);
+}
+
+// Responsive adjustments
+@media (max-width: 991.98px) {
+  .sidebar {
+    position: static;
+    height: auto;
+  }
+
+  .main-content {
+    min-height: auto;
+  }
+}
